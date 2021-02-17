@@ -5,6 +5,34 @@
     <link>http://artofai.github.io/tags/</link>
     <description>Recent content in Tags on The Art of Artificial Intelligence</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="http://artofai.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Sun, 14 Feb 2021 12:56:09 +0100</lastBuildDate><atom:link href="http://artofai.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>language-models</title>
+      <link>http://artofai.github.io/tags/language-models/</link>
+      <pubDate>Sun, 14 Feb 2021 12:56:09 +0100</pubDate>
+      
+      <guid>http://artofai.github.io/tags/language-models/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>nlp</title>
+      <link>http://artofai.github.io/tags/nlp/</link>
+      <pubDate>Sun, 14 Feb 2021 12:56:09 +0100</pubDate>
+      
+      <guid>http://artofai.github.io/tags/nlp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>pytorch</title>
+      <link>http://artofai.github.io/tags/pytorch/</link>
+      <pubDate>Sun, 14 Feb 2021 12:56:09 +0100</pubDate>
+      
+      <guid>http://artofai.github.io/tags/pytorch/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
