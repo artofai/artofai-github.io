@@ -3,7 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://artofai.github.io/pl/posts/language-models-01/</loc>
+    <loc>http://artofai.github.io/posts/language-models-02/</loc>
+    <lastmod>2021-02-28T15:47:38+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://artofai.github.io/posts/</loc>
+    <lastmod>2021-02-28T15:47:38+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://artofai.github.io/</loc>
+    <lastmod>2021-02-28T15:47:38+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://artofai.github.io/posts/language-models-01/</loc>
     <lastmod>2021-02-14T12:56:09+01:00</lastmod>
   </url>
   
@@ -18,22 +33,12 @@
   </url>
   
   <url>
-    <loc>http://artofai.github.io/pl/</loc>
-    <lastmod>2021-02-14T12:56:09+01:00</lastmod>
-  </url>
-  
-  <url>
     <loc>http://artofai.github.io/tags/pytorch/</loc>
     <lastmod>2021-02-14T12:56:09+01:00</lastmod>
   </url>
   
   <url>
     <loc>http://artofai.github.io/tags/</loc>
-    <lastmod>2021-02-14T12:56:09+01:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>http://artofai.github.io/</loc>
     <lastmod>2021-02-14T12:56:09+01:00</lastmod>
   </url>
   

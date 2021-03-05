@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+    
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>Language Models 02 - The Art of Artificial Intelligence</title>
+  <meta name="description" content="We start the implementation with dataset exploratory analysis and project template.
+Project template If you want to code along (I strongly reccomend such aproach) you can use any project template you like. The template I will use is following:
+Going top-down:
+ char_lm - Directory with model&rsquo;s package data - All data. It contains multiple subdirectories  raw - Data as downloaded/scrapped/extracted. Read only, no manual manipulations allowed! interim - Intermediate formats - after prerocessing etc dataset - Datasets after preparatons, ready to be used by models."><script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "WebSite",
+    "name": "The Art of Artificial Intelligence",
+    
+    "url": "http:\/\/artofai.github.io\/"
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Organization",
+  "name": "",
+  "url": "http:\/\/artofai.github.io\/"
+  
+  
+  
+  
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "item": {
+          "@id": "http:\/\/artofai.github.io\/",
+          "name": "home"
+        }
+    },{
+        "@type": "ListItem",
+        "position": 3,
+        "item": {
+          "@id": "http:\/\/artofai.github.io\/posts\/language-models-02\/",
+          "name": "Language models 02"
+        }
+    }]
+}
+</script><script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "Article",
+  "author": {
+    "name" : ""
+  },
+  "headline": "Language Models 02",
+  "description" : "We start the implementation with dataset exploratory analysis and project template.\nProject template If you want to code along (I strongly reccomend such aproach) you can use any project template you like. The template I will use is following:\nGoing top-down:\n char_lm - Directory with model\u0026rsquo;s package data - All data. It contains multiple subdirectories  raw - Data as downloaded\/scrapped\/extracted. Read only, no manual manipulations allowed! interim - Intermediate formats - after prerocessing etc dataset - Datasets after preparatons, ready to be used by models.",
+  "inLanguage" : "en",
+  "wordCount":  1270 ,
+  "datePublished" : "2021-02-28T15:47:38",
+  "dateModified" : "2021-02-28T15:47:38",
+  "image" : "http:\/\/artofai.github.io\/",
+  "keywords" : [ "" ],
+  "mainEntityOfPage" : "http:\/\/artofai.github.io\/posts\/language-models-02\/",
+  "publisher" : {
+    "@type": "Organization",
+    "name" : "http:\/\/artofai.github.io\/",
+    "logo" : {
+        "@type" : "ImageObject",
+        "url" : "http:\/\/artofai.github.io\/",
+        "height" :  60 ,
+        "width" :  60
+    }
+  }
+}
+</script>
+
+<meta property="og:title" content="Language Models 02" />
+<meta property="og:description" content="We start the implementation with dataset exploratory analysis and project template.
+Project template If you want to code along (I strongly reccomend such aproach) you can use any project template you like. The template I will use is following:
+Going top-down:
+ char_lm - Directory with model&rsquo;s package data - All data. It contains multiple subdirectories  raw - Data as downloaded/scrapped/extracted. Read only, no manual manipulations allowed! interim - Intermediate formats - after prerocessing etc dataset - Datasets after preparatons, ready to be used by models.">
+<meta property="og:url" content="http://artofai.github.io/posts/language-models-02/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="The Art of Artificial Intelligence" />
+
+  <meta name="twitter:title" content="Language Models 02" />
+  <meta name="twitter:description" content="We start the implementation with dataset exploratory analysis and project template.
+Project template If you want to code along (I strongly reccomend such aproach) you can use any project template you …">
+  <meta name="twitter:card" content="summary" />
+  <meta name="generator" content="Hugo 0.80.0" />
+  <link rel="alternate" href="http://artofai.github.io/index.xml" type="application/rss+xml" title="The Art of Artificial Intelligence"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="http://artofai.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="http://artofai.github.io/css/syntax.css" /><link rel="stylesheet" href="http://artofai.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous"><style>
+
+    aside {
+        border: rebeccapurple solid;
+    }
+
+</style>
+
+
+  </head>
+  <body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="http://artofai.github.io/">The Art of Artificial Intelligence</a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="main-navbar">
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+
+        
+      </ul>
+    </div>
+
+    
+
+  </div>
+</nav>
+
+
+
+
+    
+
+
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+<div class="pswp__bg"></div>
+
+<div class="pswp__scroll-wrap">
+    
+    <div class="pswp__container">
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+      <div class="pswp__item"></div>
+    </div>
+    
+    <div class="pswp__ui pswp__ui--hidden">
+    <div class="pswp__top-bar">
+      
+      <div class="pswp__counter"></div>
+      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+      <button class="pswp__button pswp__button--share" title="Share"></button>
+      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+      
+      
+      <div class="pswp__preloader">
+        <div class="pswp__preloader__icn">
+          <div class="pswp__preloader__cut">
+            <div class="pswp__preloader__donut"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+      <div class="pswp__share-tooltip"></div>
+    </div>
+    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+    </button>
+    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+    </button>
+    <div class="pswp__caption">
+      <div class="pswp__caption__center"></div>
+    </div>
+    </div>
+    </div>
+</div>
+
+
+  
+  
+  
+
+
+
+
+
+
+  
+
+  <header class="header-section ">
+    
+    <div class="intro-header no-img">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+            <div class="posts-heading">
+              
+                <h1>Language Models 02</h1>
+              
+              
+                <hr class="small">
+              
+              
+              
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+    
+<div class="container" role="main">
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+      <article role="main" class="blog-post">
+        <p>We start the implementation with dataset exploratory analysis and project template.</p>
+<h1 id="project-template">Project template</h1>
+<p>If you want to code along (I strongly reccomend such aproach) you can use any project template you like. The template I will use is following:</p>
+<p><img src="/lm/02_structure.png" alt="awd"></p>
+<p>Going top-down:</p>
+<ul>
+<li><code>char_lm</code> - Directory with model&rsquo;s package</li>
+<li><code>data</code> - All data. It contains multiple subdirectories
+<ul>
+<li><code>raw</code> - Data as downloaded/scrapped/extracted. Read only, no manual manipulations allowed!</li>
+<li><code>interim</code> - Intermediate formats - after prerocessing etc</li>
+<li><code>dataset</code> - Datasets after preparatons, ready to be used by models.</li>
+</ul>
+</li>
+<li><code>models</code> - Storing trained models</li>
+<li><code>notebooks</code> - Jupyter notebooks used for exploration/rough experimentation. No other use allowed!</li>
+<li><code>scripts</code> - Utility scripts that are not part of model package. Distinction between <code>scripts</code> and <code>char_lm</code> is pretty arbitrary</li>
+<li><code>tests</code> - unit tests. Yes we are going to write them.</li>
+<li><code>.pre-commit-config.yaml</code> - I use <a href="https://pre-commit.com/">pre-commit</a> to help me keep code quality. Optional</li>
+<li><code>poetry.lock</code>/<code>pyproject.toml</code> - I use <a href="https://python-poetry.org/">poetry</a> for installing packages. I encourage you to give a try but it is file to stick with conda/pip</li>
+</ul>
+<p>You can download complete project from <a href="https://github.com/artofai/char-lm">https://github.com/artofai/char-lm</a></p>
+<h1 id="dataset">Dataset</h1>
+<p>As I stated in previous part we will start with character language model and make a switch to subword later. For now a good dataset is <a href="https://www.kaggle.com/crawford/us-census-city-and-place-names">US Census: City and Place Names</a>. Download and extract it to <code>data/raw/us-city-place-names.csv</code>. Spend a few minuts to familiarize yourself with the data and we will go to exploration.</p>
+<p>Aside</p>
+<p>Try to perform exploratory analysis on your own and and compare your conclusions with mine!</p>
+<p>Complete notebook is avaliable on github: <a href="https://github.com/artofai/char-lm/blob/master/notebooks/cities-eda.ipynb">https://github.com/artofai/char-lm/blob/master/notebooks/cities-eda.ipynb</a>.</p>
+<h2 id="eda">EDA</h2>
+<p>First issue is the encoding. If we try to load it with default <code>pd.read_csv</code> settings it will throw a unicode exception. Unfortunatrelly there is no information about encoding on dataset page so I did a small investigation and it looks like ISO-8859-1 (or latin-1 - it&rsquo;s the same) is correct encoding.</p>
+<p>If you would like to read more about dealing with encoding issues leave a comment.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/raw/us-city-place-names.csv&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;ISO-8859-1&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></div><pre><code>       state_id      state_name                    city
+40583        45           Texas                  Leakey
+46096        50   West Virginia                     Pax
+36000        39            Ohio  Jackson Center village
+25542        30         Montana             Hot Springs
+29099        34  North Carolina                 Lowland
+43780        48           Texas                  Burton
+24541        29        Missouri              Ellisville
+48214        55       Wisconsin        Endeavor village
+6706         12         Florida           Neptune Beach
+25650        31      New Jersey                 Beverly
+</code></pre><p>There are three columns. We are interested only in <code>city</code>. Interestingly, we could also utilize information about state but let&rsquo;s leave it for another time.</p>
+<p>There is no nulls (yay) and after deduplicationg city we have about 25000 examples - decent.</p>
+<pre><code>df.isnull().sum()
+</code></pre><pre><code>state_id      0
+state_name    0
+city          0
+dtype: int64
+</code></pre><pre><code>df_deduplicated = df.drop_duplicates('city')
+len(df_deduplicated)
+</code></pre><pre><code>24583
+</code></pre><p>Analysis of city lengths (in characters)</p>
+<pre><code>cities = df_deduplicated['city']
+lens = [len(s) for s in cities]
+sns.distplot(lens, rug=True)
+</code></pre><p><img src="/lm/city_len_dist.svg" alt=""></p>
+<p>Distribution looks pretty nice - skewed normal distribution with little tail. Let&rsquo;s take a look on the longest examples:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">cities</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">())[</span><span class="o">-</span><span class="mi">20</span><span class="p">:]</span>
+</code></pre></div><pre><code>12555                                South Chicago Heights village
+31898                                Village of the Branch village
+29685                                Peapack and Gladstone borough
+48228                               Fontana-on-Geneva Lake village
+17285                               Lexington-Fayette urban county
+25161                              Village of Four Seasons village
+4160                               El Paso de Robles (Paso Robles)
+22113                              Village of Grosse Pointe Shores
+20047                             Chevy Chase Section Five village
+20048                            Chevy Chase Section Three village
+7642                             Webster County unified government
+30225                           Los Ranchos de Albuquerque village
+7293                         Echols County consolidated government
+16237                  Greeley County unified government (balance)
+7327                  Georgetown-Quitman County unified government
+7254               Cusseta-Chattahoochee County unified government
+7151             Athens-Clarke County unified government (balance)
+42659         Nashville-Davidson metropolitan government (balance)
+17293       Louisville/Jefferson County metro government (balance)
+7155     Augusta-Richmond County consolidated government (balance)
+Name: city, dtype: object
+</code></pre><p>I don&rsquo;t live in the US so names with <code>(balance)</code> are a mystery. I will remove them later.</p>
+<p>Next, let&rsquo;s take a look on character distributions:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">char_freq</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">cities</span><span class="p">))</span>
+<span class="nb">sorted</span><span class="p">(</span><span class="n">char_freq</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</code></pre></div><pre><code>[('ñ', 3),
+ ('/', 3),
+ ('X', 4),
+ ('(', 15),
+ (')', 15),
+ (&quot;'&quot;, 27),
+ ('j', 52),
+ ('Z', 61),
+ ('Q', 68),
+ ('-', 84),
+ ('.', 108),
+ ('Y', 134),
+ ('q', 153),
+ ('U', 168),
+ ('z', 295),
+ ('x', 364),
+ ('J', 406),
+ ('I', 424),
+ ('K', 653),
+ ('V', 741),
+ ('O', 762),
+ ('T', 1042),
+ ('D', 1069),
+ ('E', 1110),
+ ('N', 1134),
+ ('A', 1233),
+ ('F', 1300),
+ ('f', 1362),
+ ('G', 1444),
+ ('R', 1551),
+ ('W', 1714),
+ ('L', 2002),
+ ('H', 2075),
+ ('P', 2166),
+ ('p', 2257),
+ ('M', 2564),
+ ('B', 2647),
+ ('w', 2708),
+ ('S', 3132),
+ ('m', 3292),
+ ('k', 3484),
+ ('C', 3518),
+ ('b', 3550),
+ ('y', 3772),
+ ('c', 3874),
+ ('d', 5645),
+ ('h', 5900),
+ ('u', 6361),
+ ('v', 6445),
+ ('g', 8222),
+ ('s', 9229),
+ ('t', 11389),
+ (' ', 12847),
+ ('n', 15172),
+ ('r', 15726),
+ ('i', 16546),
+ ('o', 17874),
+ ('a', 21525),
+ ('l', 22549),
+ ('e', 25270)]
+</code></pre><p>Looks good, except character <code>ñ</code> and <code>/</code>.</p>
+<h3 id="removing-outliers">Removing outliers</h3>
+<p>According to our analysis, we are going to remove entries containing any of <code>()ñ/</code>.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="n">idx_to_drop</span> <span class="o">=</span> <span class="n">cities</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;ñ|\/|\(|\)&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">idx_to_drop</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cities</span><span class="p">[</span><span class="n">idx_to_drop</span><span class="p">])</span>
+<span class="n">cleaned_cities</span> <span class="o">=</span> <span class="n">cities</span><span class="p">[</span><span class="o">~</span><span class="n">idx_to_drop</span><span class="p">]</span>
+<span class="n">cleaned_cities</span>
+</code></pre></div><pre><code>3299                                             Fredonia (Biscoe)
+4160                               El Paso de Robles (Paso Robles)
+4235                                          La Cañada Flintridge
+4398                                    San Buenaventura (Ventura)
+4874                                                    Cañon City
+5051                                           Raymer (New Raymer)
+5130                                             Milford (balance)
+7151             Athens-Clarke County unified government (balance)
+7155     Augusta-Richmond County consolidated government (balance)
+13788                                       Indianapolis (balance)
+16237                  Greeley County unified government (balance)
+17293       Louisville/Jefferson County metro government (balance)
+25497                                   Butte-Silver Bow (balance)
+30199                                                     Española
+40771                                       Naval Air Station/ Jrb
+42575                                  Hartsville/Trousdale County
+42659         Nashville-Davidson metropolitan government (balance)
+47809                                    Addison (Webster Springs)
+47820                                      Bath (Berkeley Springs)
+48039                                         Womelsdorf (Coalton)
+Name: city, dtype: object
+</code></pre><p>It is always good to make a sanity check - how much data will be removed and what. THis operation will remove 20 examples - for me removal list looks great.</p>
+<p>At this point I stop the EDA. In <code>cleaned_cities</code> there is a list of cities used for modeling.</p>
+<h3 id="build-dataset-script">Build dataset script</h3>
+<p>We could in theory save dataset from exploratory notebook. But it would be a bad practice - data enbginerring and exploration shouln&rsquo;t be mixed. Because of this let&rsquo;s create a data preprocessing script in <code>scrips/build_dataset.py</code></p>
+<p>Our knowledge from EDA can be trasnferred to a function. We already know what kind of preprocessing want to apply so implementation is straightforward:</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">preprocess_dataset</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="s2">&#34;&#34;&#34;Preprocesses the cities dataset by removing entries with invalid characters
+</span><span class="s2">
+</span><span class="s2">    Args:
+</span><span class="s2">        df (pd.DataFrame): Source dataframe, requires column &#34;city&#34;
+</span><span class="s2">
+</span><span class="s2">    Returns:
+</span><span class="s2">        List[str]: A list of cleaned cities
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s2">&#34;city&#34;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Rows after deduplication: {len(df)}&#34;</span><span class="p">)</span>
+
+    <span class="n">cities</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&#34;city&#34;</span><span class="p">]</span>
+    <span class="n">idx_to_drop</span> <span class="o">=</span> <span class="n">cities</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="sa">r</span><span class="s2">&#34;ñ|\/|\(|\)&#34;</span><span class="p">)</span>
+    <span class="n">cities</span> <span class="o">=</span> <span class="n">cities</span><span class="p">[</span><span class="o">~</span><span class="n">idx_to_drop</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Dropped {idx_to_drop.sum()} outliers&#34;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">cities</span><span class="p">)</span>
+</code></pre></div><p>Second piece, is to take cleaned cities, split them into train/val/test and save into separate files.
+I also save the full dataset at this step - maybe it will be useful later. To make the process deterministic a random state can be provided.</p>
+<p>Alert</p>
+<p>Ability to reproduce your results is important, consider every place where using random generatores saving seed value</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">split_and_save</span><span class="p">(</span><span class="n">cities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">out_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="s2">&#34;&#34;&#34;Splits dataset into train/val/test and saves to text files
+</span><span class="s2">
+</span><span class="s2">    Args:
+</span><span class="s2">        cities (List[str]): List of cleaned cities
+</span><span class="s2">        out_dir (Path): Output directory. Will be created if not exists
+</span><span class="s2">        random_state (int): Random state for splitting
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="n">out_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Saving results to {out_dir}&#34;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="p">(</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">&#34;full.txt&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;wt&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cities</span><span class="p">))</span>
+
+    <span class="n">keeep_set</span><span class="p">,</span> <span class="n">test_set</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+        <span class="n">cities</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span>
+    <span class="p">)</span>
+
+    <span class="n">train_set</span><span class="p">,</span> <span class="n">val_set</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+        <span class="n">keeep_set</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">)</span>
+
+    <span class="k">with</span> <span class="p">(</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">&#34;train.txt&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;wt&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">train_set</span><span class="p">))</span>
+    <span class="k">with</span> <span class="p">(</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">&#34;val.txt&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;wt&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">val_set</span><span class="p">))</span>
+    <span class="k">with</span> <span class="p">(</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">&#34;test.txt&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;wt&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">test_set</span><span class="p">))</span>
+</code></pre></div><p>Building blocks are ready now we can create a simple command line interface using click. We would like to pass the raw, input file, the output directory, specify encoding of the input file and a random state.</p>
+<div class="highlight"><pre class="chroma"><code class="language-python" data-lang="python"><span class="nd">@click.command</span><span class="p">()</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s2">&#34;--input-path&#34;</span><span class="p">,</span> <span class="s2">&#34;-i&#34;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s2">&#34;--output-dir&#34;</span><span class="p">,</span> <span class="s2">&#34;-o&#34;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s2">&#34;--encoding&#34;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&#34;ISO-8859-1&#34;</span><span class="p">)</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s2">&#34;--random-state&#34;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">input_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+    <span class="n">input_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">input_path</span><span class="p">)</span>
+    <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Reading file {input_path} with encoding {encoding}&#34;</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Read {len(df)} rows&#34;</span><span class="p">)</span>
+
+    <span class="n">cities</span> <span class="o">=</span> <span class="n">preprocess_dataset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+    <span class="n">split_and_save</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Done.&#34;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
+
+        
+
+        
+
+        
+      </article>
+
+      
+        <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="http://artofai.github.io/posts/language-models-01/" data-toggle="tooltip" data-placement="top" title="Language Models 01">&larr; Previous Post</a>
+            </li>
+          
+          
+        </ul>
+      
+
+
+      
+
+    </div>
+  </div>
+</div>
+
+      
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+        <ul class="list-inline text-center footer-links">
+          
+          
+        </ul>
+        <p class="credits copyright text-muted">
+          
+
+          &nbsp;&bull;&nbsp;&copy;
+          
+            2021
+          
+
+          
+            &nbsp;&bull;&nbsp;
+            <a href="http://artofai.github.io/">The Art of Artificial Intelligence</a>
+          
+        </p>
+        
+        <p class="credits theme-by text-muted">
+          <a href="https://gohugo.io">Hugo v0.80.0</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
+          
+        </p>
+      </div>
+    </div>
+  </div>
+</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="http://artofai.github.io/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="http://artofai.github.io/js/load-photoswipe.js"></script>
+
+
+
+
+
+
+
+
+
+    
+  </body>
+</html>
+
