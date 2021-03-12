@@ -1,21 +1,15 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>language-models on The Art of Artificial Intelligence</title>
-    <link>http://artofai.github.io/tags/language-models/</link>
-    <description>Recent content in language-models on The Art of Artificial Intelligence</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 14 Feb 2021 12:56:09 +0100</lastBuildDate><atom:link href="http://artofai.github.io/tags/language-models/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Language Models 01</title>
-      <link>http://artofai.github.io/posts/language-models-01/</link>
-      <pubDate>Sun, 14 Feb 2021 12:56:09 +0100</pubDate>
-      
-      <guid>http://artofai.github.io/posts/language-models-01/</guid>
-      <description>If there is one single topic I could reccomend to learn for every person learning NLP - that would be language models.
-Chances that you will need to implement a LM in your work are very small. But concepts you can learn are priceless. A lot of NLP topics like sequence to sequence models, machine translation, summarization - or even famous transformer models are built on top of lanaguage models. Of course they also have some direct applications.</description>
-    </item>
-    
-  </channel>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>language-models - Tag - The Art of Artificial Intelligence</title>
+        <link>https://www.artofai.io/tags/language-models/</link>
+        <description>language-models - Tag - The Art of Artificial Intelligence</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 14 Feb 2021 12:56:09 &#43;0100</lastBuildDate><atom:link href="https://www.artofai.io/tags/language-models/" rel="self" type="application/rss+xml" /><item>
+    <title>Language Models 01</title>
+    <link>https://www.artofai.io/posts/language-models-01/</link>
+    <pubDate>Sun, 14 Feb 2021 12:56:09 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>https://www.artofai.io/posts/language-models-01/</guid>
+    <description><![CDATA[If there is one single topic I could reccomend to learn for every person learning NLP - that would be language models.
+Chances that you will need to implement a LM in your work are very small. But concepts you can learn are priceless. A lot of NLP topics like sequence to sequence models, machine translation, summarization - or even famous transformer models are built on top of lanaguage models. Of course they also have some direct applications.]]></description>
+</item></channel>
 </rss>

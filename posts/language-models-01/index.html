@@ -1,228 +1,100 @@
 <!DOCTYPE html>
-<html lang="en" itemscope itemtype="http://schema.org/WebPage">
-  <head>
-    
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-
-  <title>Language Models 01 - The Art of Artificial Intelligence</title>
-  <meta name="description" content="If there is one single topic I could reccomend to learn for every person learning NLP - that would be language models.
-Chances that you will need to implement a LM in your work are very small. But concepts you can learn are priceless. A lot of NLP topics like sequence to sequence models, machine translation, summarization - or even famous transformer models are built on top of lanaguage models. Of course they also have some direct applications."><script type="application/ld+json">
-{
-    "@context": "http://schema.org",
-    "@type": "WebSite",
-    "name": "The Art of Artificial Intelligence",
-    
-    "url": "http:\/\/artofai.github.io\/"
-}
-</script><script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "Organization",
-  "name": "",
-  "url": "http:\/\/artofai.github.io\/"
-  
-  
-  
-  
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [{
-        "@type": "ListItem",
-        "position": 1,
-        "item": {
-          "@id": "http:\/\/artofai.github.io\/",
-          "name": "home"
-        }
-    },{
-        "@type": "ListItem",
-        "position": 3,
-        "item": {
-          "@id": "http:\/\/artofai.github.io\/posts\/language-models-01\/",
-          "name": "Language models 01"
-        }
-    }]
-}
-</script><script type="application/ld+json">
-{
-  "@context": "http://schema.org",
-  "@type": "Article",
-  "author": {
-    "name" : ""
-  },
-  "headline": "Language Models 01",
-  "description" : "If there is one single topic I could reccomend to learn for every person learning NLP - that would be language models.\nChances that you will need to implement a LM in your work are very small. But concepts you can learn are priceless. A lot of NLP topics like sequence to sequence models, machine translation, summarization - or even famous transformer models are built on top of lanaguage models. Of course they also have some direct applications.",
-  "inLanguage" : "en",
-  "wordCount":  1373 ,
-  "datePublished" : "2021-02-14T12:56:09",
-  "dateModified" : "2021-02-14T12:56:09",
-  "image" : "http:\/\/artofai.github.io\/",
-  "keywords" : [ "nlp, language-models, pytorch" ],
-  "mainEntityOfPage" : "http:\/\/artofai.github.io\/posts\/language-models-01\/",
-  "publisher" : {
-    "@type": "Organization",
-    "name" : "http:\/\/artofai.github.io\/",
-    "logo" : {
-        "@type" : "ImageObject",
-        "url" : "http:\/\/artofai.github.io\/",
-        "height" :  60 ,
-        "width" :  60
-    }
-  }
-}
-</script>
-
-<meta property="og:title" content="Language Models 01" />
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Language Models 01 - The Art of Artificial Intelligence</title><meta name="Description" content=""><meta property="og:title" content="Language Models 01" />
 <meta property="og:description" content="If there is one single topic I could reccomend to learn for every person learning NLP - that would be language models.
-Chances that you will need to implement a LM in your work are very small. But concepts you can learn are priceless. A lot of NLP topics like sequence to sequence models, machine translation, summarization - or even famous transformer models are built on top of lanaguage models. Of course they also have some direct applications.">
-<meta property="og:url" content="http://artofai.github.io/posts/language-models-01/" />
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="The Art of Artificial Intelligence" />
-
-  <meta name="twitter:title" content="Language Models 01" />
-  <meta name="twitter:description" content="If there is one single topic I could reccomend to learn for every person learning NLP - that would be language models.
-Chances that you will need to implement a LM in your work are very small. But …">
-  <meta name="twitter:card" content="summary" />
-  <meta name="generator" content="Hugo 0.80.0" />
-  <link rel="alternate" href="http://artofai.github.io/index.xml" type="application/rss+xml" title="The Art of Artificial Intelligence"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"><link rel="stylesheet" href="http://artofai.github.io/css/main.css" /><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" /><link rel="stylesheet" href="http://artofai.github.io/css/syntax.css" /><link rel="stylesheet" href="http://artofai.github.io/css/codeblock.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.css" integrity="sha384-h/L2W9KefUClHWaty3SLE5F/qvc4djlyR4qY3NUV5HGQBBW7stbcfff1+I/vmsHh" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/default-skin/default-skin.min.css" integrity="sha384-iD0dNku6PYSIQLyfTOpB06F2KCZJAKLOThS5HRe8b3ibhdEQ6eKsFf/EeFxdOt5R" crossorigin="anonymous"><style>
-
-    aside {
-        border: rebeccapurple solid;
+Chances that you will need to implement a LM in your work are very small. But concepts you can learn are priceless. A lot of NLP topics like sequence to sequence models, machine translation, summarization - or even famous transformer models are built on top of lanaguage models. Of course they also have some direct applications." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.artofai.io/posts/language-models-01/" />
+<meta property="article:published_time" content="2021-02-14T12:56:09+01:00" />
+<meta property="article:modified_time" content="2021-02-14T12:56:09+01:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Language Models 01"/>
+<meta name="twitter:description" content="If there is one single topic I could reccomend to learn for every person learning NLP - that would be language models.
+Chances that you will need to implement a LM in your work are very small. But concepts you can learn are priceless. A lot of NLP topics like sequence to sequence models, machine translation, summarization - or even famous transformer models are built on top of lanaguage models. Of course they also have some direct applications."/>
+<meta name="application-name" content="The Art of Artificial Intelligence">
+<meta name="apple-mobile-web-app-title" content="The Art of Artificial Intelligence"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.artofai.io/posts/language-models-01/" /><link rel="next" href="https://www.artofai.io/posts/language-models-02/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Language Models 01",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.artofai.io\/posts\/language-models-01\/"
+        },"genre": "posts","keywords": "nlp, language-models, pytorch","wordcount":  1373 ,
+        "url": "https:\/\/www.artofai.io\/posts\/language-models-01\/","datePublished": "2021-02-14T12:56:09+01:00","dateModified": "2021-02-14T12:56:09+01:00","publisher": {
+            "@type": "Organization",
+            "name": "Author"},"author": {
+                "@type": "Person",
+                "name": "Author"
+            },"description": ""
     }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
-</style>
-
-
-  </head>
-  <body>
-    <nav class="navbar navbar-default navbar-fixed-top navbar-custom">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" href="http://artofai.github.io/">The Art of Artificial Intelligence</a>
-    </div>
-
-    <div class="collapse navbar-collapse" id="main-navbar">
-      <ul class="nav navbar-nav navbar-right">
-        
-
-        
-
-        
-      </ul>
-    </div>
-
-    
-
-  </div>
-</nav>
-
-
-
-
-    
-
-
-<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-<div class="pswp__bg"></div>
-
-<div class="pswp__scroll-wrap">
-    
-    <div class="pswp__container">
-      <div class="pswp__item"></div>
-      <div class="pswp__item"></div>
-      <div class="pswp__item"></div>
-    </div>
-    
-    <div class="pswp__ui pswp__ui--hidden">
-    <div class="pswp__top-bar">
-      
-      <div class="pswp__counter"></div>
-      <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-      <button class="pswp__button pswp__button--share" title="Share"></button>
-      <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-      <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-      
-      
-      <div class="pswp__preloader">
-        <div class="pswp__preloader__icn">
-          <div class="pswp__preloader__cut">
-            <div class="pswp__preloader__donut"></div>
-          </div>
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="The Art of Artificial Intelligence">The Art of Artificial Intelligence</a>
         </div>
-      </div>
-    </div>
-    <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-      <div class="pswp__share-tooltip"></div>
-    </div>
-    <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-    </button>
-    <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-    </button>
-    <div class="pswp__caption">
-      <div class="pswp__caption__center"></div>
-    </div>
-    </div>
-    </div>
-</div>
-
-
-  
-  
-  
-
-
-
-
-
-
-  
-
-  <header class="header-section ">
-    
-    <div class="intro-header no-img">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-            <div class="posts-heading">
-              
-                <h1>Language Models 01</h1>
-              
-              
-                <hr class="small">
-              
-              
-              
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </header>
-
-
-    
-<div class="container" role="main">
-  <div class="row">
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-      <article role="main" class="blog-post">
-        <p>If there is one single topic I could reccomend to learn for every person learning NLP - that would be language models.</p>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="The Art of Artificial Intelligence">The Art of Artificial Intelligence</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Language Models 01</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Author</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-14">2021-02-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1373 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;7 minutes&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#theory">Theory</a>
+      <ul>
+        <li><a href="#definition">Definition</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>If there is one single topic I could reccomend to learn for every person learning NLP - that would be language models.</p>
 <p>Chances that you will need to implement a LM in your work are very small. But concepts you can learn are priceless. A lot of NLP topics like sequence to sequence models, machine translation, summarization - or even famous transformer models are built on top of lanaguage models. Of course they also have some direct applications.</p>
 <p>In this series we are going to build a language model using pytorch. We will start with required theory, next we will examine the data, build the model and evaluate it. In the end we will some fun things with trained model!</p>
 <h1 id="series">Series</h1>
@@ -347,106 +219,52 @@ As at each step we multiply numbers in interval \([0, 1]\) at each step the valu
 </aside>
 <h1 id="evaluation">Evaluation</h1>
 <p>Ok, but how do we know if the model is good? Mabe we could thrat it as a multilabel classification problem?</p>
-
-<link rel="stylesheet" href="http://artofai.github.io/css/hugo-easy-gallery.css" />
-<div class="box" >
-  <figure  itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-    <div class="img">
-      <img itemprop="thumbnail" src="/meme/well_yes_but_actually_no.jpg" alt="/meme/well_yes_but_actually_no.jpg"/>
-    </div>
-    <a href="/meme/well_yes_but_actually_no.jpg" itemprop="contentUrl"></a>
-  </figure>
-</div>
+<figure>
+    <img src="/meme/well_yes_but_actually_no.jpg"/> 
+</figure>
 
 <p>For language models there is a specific metric called perplexity. It is strongly related to the information entropy. We will explore this in details later, simplyfying things for now.</p>
 <p>Intuitivly, perplexity tells &ldquo;on average how many tokens model is considering to be next&rdquo;. It means that lower=better (just like loss). Lower bound is 1 (model cannot consider less than 1 token). The upper bound is infinite. It may sound useless (how do we know if we are right if the resulti can by arbitrarily high?). But recall that metrics like MAE also have no maximum value. Perplexity is affected by vocab size and token distribution. It means that we cannot make a fair comaprision for models using different tokenization method.</p>
 <p>Given that, is it useful at all? My answer is yes, but not as much as accuracy, f1 or similar. For now it is enught to know that we should aim for lower PPL during model training.</p>
 <h1 id="summary">Summary</h1>
 <p>Ok, that was quite a lot of theory. Now we are prepared for implementing the model!</p>
-
-
-        
-          <div class="blog-tags">
-            
-              <a href="http://artofai.github.io//tags/nlp/">nlp</a>&nbsp;
-            
-              <a href="http://artofai.github.io//tags/language-models/">language-models</a>&nbsp;
-            
-              <a href="http://artofai.github.io//tags/pytorch/">pytorch</a>&nbsp;
-            
-          </div>
-        
-
-        
-
-        
-      </article>
-
-      
-        <ul class="pager blog-pager">
-          
-          
-            <li class="next">
-              <a href="http://artofai.github.io/posts/language-models-02/" data-toggle="tooltip" data-placement="top" title="Language Models 02">Next Post &rarr;</a>
-            </li>
-          
-        </ul>
-      
-
-
-      
-
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-02-14</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span></span>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/nlp/">nlp</a>,&nbsp;<a href="/tags/language-models/">language-models</a>,&nbsp;<a href="/tags/pytorch/">pytorch</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+            <a href="/posts/language-models-02/" class="next" rel="next" title="Language Models 02">Language Models 02<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank"></a></span></div>
+        </div>
+    </footer></div>
 
-      
-<footer>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-        <ul class="list-inline text-center footer-links">
-          
-          
-        </ul>
-        <p class="credits copyright text-muted">
-          
-
-          &nbsp;&bull;&nbsp;&copy;
-          
-            2021
-          
-
-          
-            &nbsp;&bull;&nbsp;
-            <a href="http://artofai.github.io/">The Art of Artificial Intelligence</a>
-          
-        </p>
-        
-        <p class="credits theme-by text-muted">
-          <a href="https://gohugo.io">Hugo v0.80.0</a> powered &nbsp;&bull;&nbsp; Theme <a href="https://github.com/halogenica/beautifulhugo">Beautiful Hugo</a> adapted from <a href="https://deanattali.com/beautiful-jekyll/">Beautiful Jekyll</a>
-          
-        </p>
-      </div>
-    </div>
-  </div>
-</footer><script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.js" integrity="sha384-K3vbOmF2BtaVai+Qk37uypf7VrgBubhQreNQe9aGsz9lB63dIFiQVlJbr92dw2Lx" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/contrib/auto-render.min.js" integrity="sha384-kmZOZB5ObwgQnS/DuDg6TScgOiWWBiVt0plIRkZCmE6rDZGrEOQeHM5PcHi+nyqe" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
-<script src="http://artofai.github.io/js/main.js"></script><script> renderMathInElement(document.body); </script><script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe.min.js" integrity="sha384-QELNnmcmU8IR9ZAykt67vGr9/rZJdHbiWi64V88fCPaOohUlHCqUD/unNN0BXSqy" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.2/photoswipe-ui-default.min.js" integrity="sha384-m67o7SkQ1ALzKZIFh4CiTA8tmadaujiTa9Vu+nqPSwDOqHrDmxLezTdFln8077+q" crossorigin="anonymous"></script><script src="http://artofai.github.io/js/load-photoswipe.js"></script>
-
-
-
-
-
-
-
-
-
-    
-  </body>
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>
-

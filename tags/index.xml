@@ -1,38 +1,28 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Tags on The Art of Artificial Intelligence</title>
-    <link>http://artofai.github.io/tags/</link>
-    <description>Recent content in Tags on The Art of Artificial Intelligence</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language>
-    <lastBuildDate>Sun, 14 Feb 2021 12:56:09 +0100</lastBuildDate><atom:link href="http://artofai.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>language-models</title>
-      <link>http://artofai.github.io/tags/language-models/</link>
-      <pubDate>Sun, 14 Feb 2021 12:56:09 +0100</pubDate>
-      
-      <guid>http://artofai.github.io/tags/language-models/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>nlp</title>
-      <link>http://artofai.github.io/tags/nlp/</link>
-      <pubDate>Sun, 14 Feb 2021 12:56:09 +0100</pubDate>
-      
-      <guid>http://artofai.github.io/tags/nlp/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>pytorch</title>
-      <link>http://artofai.github.io/tags/pytorch/</link>
-      <pubDate>Sun, 14 Feb 2021 12:56:09 +0100</pubDate>
-      
-      <guid>http://artofai.github.io/tags/pytorch/</guid>
-      <description></description>
-    </item>
-    
-  </channel>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Tags - Tag - The Art of Artificial Intelligence</title>
+        <link>https://www.artofai.io/tags/</link>
+        <description>Tags - Tag - The Art of Artificial Intelligence</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 14 Feb 2021 12:56:09 &#43;0100</lastBuildDate><atom:link href="https://www.artofai.io/tags/" rel="self" type="application/rss+xml" /><item>
+    <title>language-models</title>
+    <link>https://www.artofai.io/tags/language-models/</link>
+    <pubDate>Sun, 14 Feb 2021 12:56:09 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>https://www.artofai.io/tags/language-models/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>nlp</title>
+    <link>https://www.artofai.io/tags/nlp/</link>
+    <pubDate>Sun, 14 Feb 2021 12:56:09 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>https://www.artofai.io/tags/nlp/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>pytorch</title>
+    <link>https://www.artofai.io/tags/pytorch/</link>
+    <pubDate>Sun, 14 Feb 2021 12:56:09 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>https://www.artofai.io/tags/pytorch/</guid>
+    <description><![CDATA[]]></description>
+</item></channel>
 </rss>
