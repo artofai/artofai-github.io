@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Language Models [01] - Intro and theory - The Art of Artificial Intelligence</title><meta name="Description" content="post description"><meta property="og:title" content="Language Models [01] - Intro and theory" />
+<meta property="og:description" content="post description" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.artofai.io/posts/language-models/01-theory/" />
+<meta property="article:published_time" content="2021-02-14T12:56:09+01:00" />
+<meta property="article:modified_time" content="2021-02-14T12:56:09+01:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Language Models [01] - Intro and theory"/>
+<meta name="twitter:description" content="post description"/>
+<meta name="application-name" content="The Art of Artificial Intelligence">
+<meta name="apple-mobile-web-app-title" content="The Art of Artificial Intelligence"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.artofai.io/posts/language-models/01-theory/" /><link rel="prev" href="https://www.artofai.io/posts/language-models/02-eda/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Language Models [01] - Intro and theory",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.artofai.io\/posts\/language-models\/01-theory\/"
+        },"genre": "posts","keywords": "nlp, language models, pytorch","wordcount":  1375 ,
+        "url": "https:\/\/www.artofai.io\/posts\/language-models\/01-theory\/","datePublished": "2021-02-14T12:56:09+01:00","dateModified": "2021-02-14T12:56:09+01:00","publisher": {
+            "@type": "Organization",
+            "name": "mbednarski"},"author": {
+                "@type": "Person",
+                "name": "mbednarski"
+            },"description": "post description"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="The Art of Artificial Intelligence">The Art of Artificial Intelligence</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="The Art of Artificial Intelligence">The Art of Artificial Intelligence</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Language Models [01] - Intro and theory</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/about" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>mbednarski</a></span>&nbsp;<span class="post-category">included in <a href="/categories/language-models/"><i class="far fa-folder fa-fw"></i>Language models</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-14">2021-02-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1375 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;7 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="preview.png"
+        data-srcset="/posts/language-models/01-theory/preview.png, preview.png 1.5x, /posts/language-models/01-theory/preview.png 2x"
+        data-sizes="auto"
+        alt="/posts/language-models/01-theory/preview.png"
+        title="post description" /></div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#series">Series</a>
+      <ul>
+        <li><a href="#table-of-contents">Table of contents</a></li>
+      </ul>
+    </li>
+    <li><a href="#theory">Theory</a>
+      <ul>
+        <li><a href="#definition">Definition</a></li>
+        <li><a href="#special-tokens">Special tokens</a></li>
+      </ul>
+    </li>
+    <li><a href="#sentence-probability">Sentence probability</a></li>
+    <li><a href="#evaluation">Evaluation</a></li>
+    <li><a href="#summary">Summary</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>If there is one single topic I could reccomend to learn for every person learning NLP - that would be language models.</p>
+<p>Chances that you will need to implement a LM in your work are very small. But concepts you can learn are priceless. A lot of NLP topics like sequence to sequence models, machine translation, summarization - or even famous transformer models are built on top of lanaguage models. Of course they also have some direct applications.</p>
+<p>In this series we are going to build a language model using pytorch. We will start with required theory, next we will examine the data, build the model and evaluate it. In the end we will some fun things with trained model!</p>
+<h2 id="series">Series</h2>
+<p>This post is a past of a longer series about casual lanugage modelling. The aim is to provide you all required theory and help you to understand the topic by acutally implementing a language model. We will start with the simples possible and gradually expand it.</p>
+<h3 id="table-of-contents">Table of contents</h3>
+<ol>
+<li>Introduction and theory (you are here)</li>
+<li>Dataset exploratory analysis</li>
+<li>Project structure and tokenizer</li>
+<li>Training the model</li>
+<li>Evaluation of language model</li>
+<li>Experiments with the model</li>
+<li>Excerises for you</li>
+</ol>
+<p>Let&rsquo;s get started!</p>
+<h2 id="theory">Theory</h2>
+<p>Languge models can be divided into smaller groups. To basic ones are:</p>
+<ul>
+<li><em>casual language models</em> - also called <em>autoregressive</em></li>
+<li><em>masked language models</em> - also called <em>autoencoding</em></li>
+</ul>
+<p>In this series we will work with the first type - from now by language model I mean a casual one. Masked LM is a seperate topic ;)</p>
+<p>We can also divide them by type of tokens:</p>
+<ul>
+<li>word-level</li>
+<li>subword-level</li>
+<li>character-level</li>
+</ul>
+<p>Each of this type makes a different assumption what token is. In this series we will make a character-level one. The main reason is a lot faster training - it will allow you to learn and experiment faster. After completing this tutorial you will be able to create word-level on your own - as mechanics are basically the same.</p>
+<h3 id="definition">Definition</h3>
+<p>A casual language model is a function that predicts next token in a given sentence. Sound simple, huh? Let&rsquo;s make it a little bit formal.</p>
+<p><em>If you are afraid of formal definitions you should not - they really help in advanced scenarions</em></p>
+<p>Let&rsquo;s start with <em>sentence</em> - it is a sequence of tokens from vocabulary. First step for language modeling is to define <em>vocabulary</em> \(V\) - simply the list of allowed tokens + some special ones. We already said that tokens can be either words, subwords or characters. We denote sentence as a sequence of tokens:</p>
+<p>$$ S = w_0, w_1, w_3, \ldots, w_{n-1}, w_i \isin V $$</p>
+<p>The model takes a sequence of tokens and predicts next one. In other words, it predicts a probability for all tokens - just like in regualar classification problem. We denote it as following:</p>
+<p>$$ P(w_n | w_0, w_1, w_2, \ldots, w_{n-2}, w_{n-1}) $$</p>
+<p>For example, if ask the model &ldquo;What is the next token for sequence: &lsquo;I like &lsquo;&rdquo; we can get:</p>
+<ol>
+<li>to (0.11)</li>
+<li>good (0.05)</li>
+<li>it (0.03)</li>
+<li>Chopin (0.01)</li>
+<li>&hellip;</li>
+</ol>
+<p>All of them summing up to 1 (to make proper probability distribution).</p>
+<p>With the formal notation we can say:</p>
+<ol>
+<li>\( P(\text{to} | \text{I}, \text{like}) = 0.11 \)</li>
+<li>\( P(\text{good} | \text{I}, \text{like}) = 0.05 \)</li>
+<li>\( P(\text{it} | \text{I}, \text{like}) = 0.03 \)</li>
+<li>\( P(\text{Chopin} | \text{I}, \text{like}) = 0.01 \)</li>
+</ol>
+<p>We are good to go but there are important corner cases.</p>
+<h3 id="special-tokens">Special tokens</h3>
+<p>What if we have a sentence that should not have a continuation? For example: &ldquo;The sky is blue.&rdquo; (I even added a full stop to indicate it).</p>
+<p>$$ P(w_5 | \text{The}, \text{sky}, \text{is}, \text{blue}, \text{.}) = ? $$</p>
+<p>We need a special token to mark end of the sentence. It is usually denoted as <code>&lt;s/&gt;</code>, <code>&lt;eos&gt;</code>, <code>[EOS]</code> or similar.</p>
+<ol>
+<li>\( P(\text{&lt;s/&gt;} | \text{The}, \text{sky}, \text{is}, \text{blue}, \text{.}) = 0.8 \)</li>
+<li>\( P(\text{because} | \text{The}, \text{sky}, \text{is}, \text{blue}, \text{.}) = 0.02 \)</li>
+<li>\( P(\text{lyrics} | \text{The}, \text{sky}, \text{is}, \text{blue}, \text{.}) = 0.01 \)</li>
+<li><em>all other</em></li>
+</ol>
+<p>But what for the beginning? What if we ask a model to predict <em>first</em> token in a new sequence? Something like:</p>
+<p>$$ P(w_0 | \varnothing) $$</p>
+<p>We introduce another special token for it - <code>&lt;s&gt;</code>/<code>&lt;sos&gt;</code>/<code>[BOS]</code> - start/beginning of sequence. So our equation become:</p>
+<p>$$ P(w_0 | \text{&lt;s&gt;} ) $$</p>
+<p>Introduction of start/end tokens means that for the model we need to add them for all sentences.</p>
+<p>$$ S = \text{&lt;s&gt;}, w_1, w_2, w_3, \ldots, w_{n-1}, \text{&lt;/s&gt;} $$</p>
+<p>For example</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">The sky is blue .
+</code></pre></td></tr></table>
+</div>
+</div><p>becomes</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">&lt;s&gt; The sky is blue . &lt;/s&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>There can be more special tokens - like <code>&lt;oov&gt;</code>/<code>&lt;unk&gt;</code> for out-of-vocabulary token or <code>&lt;pad&gt;</code> for length padding. We will introduce them later when needed.</p>
+<h2 id="sentence-probability">Sentence probability</h2>
+<p>It turns out that that we can use same model for computing likelihood of whole sentence. Some examples</p>
+<ul>
+<li>\(P(\text{Order a taxi please!}) = 0.000000037 \)</li>
+<li>\(P(\text{The Earth is flat}) = 0.00000000012 \)</li>
+<li>\(P(\text{like pen green bottle}) = 0.0000000000042 \)</li>
+<li>\(P(\text{xaaaaaz grrr ee fruu@@}) = 0.00000000000000000000001 \)</li>
+</ul>
+<p>As you can see, sentences that sound reasonable have bigger scores than trashy ones. Still, absolute numbers are very low. We need to cover <em>all</em> possible sentences. And there are <em>a lot of</em> them.</p>
+<p>Advanced</p>
+<p>In order to grab a better intuition consider a following language used by Aliens</p>
+<ol>
+<li>It has 2 000 words (there is about 170 000 words in English)</li>
+<li>Sentences has to be maximum 7 words lenght</li>
+</ol>
+<p>In such scenarion number of possible sentences is:</p>
+<p>$$ V = 2000 $$
+$$ 1 \le N \le 7 $$
+$$ |S| = 2000 + 2000^2 + 2000^3 + \ldots + 2000^7 $$</p>
+<p>It gives 128 064 032 016 008 004 002 000 possible sentences!
+Assuming that each of them is equaly likely, probability of each of these is 0.0000000000000000000000078 - even for such primitive language.</p>
+<p>Fortunaltelly we are more interested in relative likelihoods. For example</p>
+<p>$$ P(\text{&ldquo;I have a car&rdquo;}) &gt; P(\text{&ldquo;I has a car&rdquo;}) $$</p>
+<p>The model says <em>it is more likely that &ldquo;have&rdquo; is better than &ldquo;has&rdquo; for this sentence</em>.</p>
+<p>But how to compute those? Answer is the chain rule. Imagine we have a sentence</p>
+<p>$$ S_0 = \text{&lt;s&gt;}, w_1, w_2, w_3, \text{&lt;/s&gt;} $$</p>
+<p>In order to compute probability of whole sentence we start with question &ldquo;what is the probability that the sentence starts with with \(w_1\)</p>
+<p>$$ P(w_1| \text{&lt;s&gt;})$$</p>
+<p>Next, we compute how likely it is to \(\text{&lt;s&gt;}, w_1\) be followed by \(w_2\) and mulpitply it with previous score.</p>
+<p>$$ P(w_1| \text{&lt;s&gt;}) \cdot P(w_2 | \text{&lt;s&gt;}, w_1 )$$</p>
+<p>Continuing to the next token</p>
+<p>$$ P(w_1| \text{&lt;s&gt;}) \cdot P(w_2 | \text{&lt;s&gt;}, w_1 ) \cdot P(w_3 | \text{&lt;s&gt;}, w_1, w_2 ) $$</p>
+<p>To the end</p>
+<p>$$ P(w_1| \text{&lt;s&gt;}) \cdot P(w_2 | \text{&lt;s&gt;}, w_1 ) \cdot P(w_3 | \text{&lt;s&gt;}, w_1, w_2 ) \cdot P(\text{&lt;/s&gt;} | \text{&lt;s&gt;}, w_1, w_2, w_3 ) $$</p>
+<p>In general case it is defined as:</p>
+<p>$$ \prod_{i=1}^n P(w_i | w_1, \ldots, w_{i-1}) $$</p>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>Question<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">As at each step we multiply numbers in interval $[0, 1]$ at each step the value will be smaller and smaller - approaching zero. Can you see an issue with it?</div>
+        </div>
+    </div>
+<h2 id="evaluation">Evaluation</h2>
+<p>Ok, but how do we know if the model is good? Mabe we could thrat it as a multilabel classification problem?</p>
+<figure>
+    <img src="well_yes_but_actually_no.jpg"/> 
+</figure>
+
+<p>For language models there is a specific metric called perplexity. It is strongly related to the information entropy. We will explore this in details later, simplyfying things for now.</p>
+<p>Intuitivly, perplexity tells &ldquo;on average how many tokens model is considering to be next&rdquo;. It means that lower=better (just like loss). Lower bound is 1 (model cannot consider less than 1 token). The upper bound is infinite. It may sound useless (how do we know if we are right if the resulti can by arbitrarily high?). But recall that metrics like MAE also have no maximum value. Perplexity is affected by vocab size and token distribution. It means that we cannot make a fair comaprision for models using different tokenization method.</p>
+<p>Given that, is it useful at all? My answer is yes, but not as much as accuracy, f1 or similar. For now it is enught to know that we should aim for lower PPL during model training.</p>
+<h2 id="summary">Summary</h2>
+<p>Ok, that was quite a lot of theory. Now we are prepared for implementing the model!</p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-02-14</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://www.artofai.io/posts/language-models/01-theory/" data-title="Language Models [01] - Intro and theory" data-hashtags="nlp,language models,pytorch"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://www.artofai.io/posts/language-models/01-theory/" data-hashtag="nlp"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://www.artofai.io/posts/language-models/01-theory/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://www.artofai.io/posts/language-models/01-theory/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="https://www.artofai.io/posts/language-models/01-theory/" data-title="Language Models [01] - Intro and theory"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/nlp/">nlp</a>,&nbsp;<a href="/tags/language-models/">language models</a>,&nbsp;<a href="/tags/pytorch/">pytorch</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/language-models/02-eda/" class="prev" rel="prev" title="Language Models [02] - EDA"><i class="fas fa-angle-left fa-fw"></i>Language Models [02] - EDA</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about" target="_blank">mbednarski</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

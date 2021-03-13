@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Language Models [02] - EDA - The Art of Artificial Intelligence</title><meta name="Description" content="post description"><meta property="og:title" content="Language Models [02] - EDA" />
+<meta property="og:description" content="post description" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.artofai.io/posts/language-models/02-eda/" />
+<meta property="article:published_time" content="2021-02-14T12:56:09+01:00" />
+<meta property="article:modified_time" content="2021-02-14T12:56:09+01:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Language Models [02] - EDA"/>
+<meta name="twitter:description" content="post description"/>
+<meta name="application-name" content="The Art of Artificial Intelligence">
+<meta name="apple-mobile-web-app-title" content="The Art of Artificial Intelligence"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.artofai.io/posts/language-models/02-eda/" /><link rel="next" href="https://www.artofai.io/posts/language-models/01-theory/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Language Models [02] - EDA",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.artofai.io\/posts\/language-models\/02-eda\/"
+        },"genre": "posts","keywords": "nlp, language models, pytorch","wordcount":  1473 ,
+        "url": "https:\/\/www.artofai.io\/posts\/language-models\/02-eda\/","datePublished": "2021-02-14T12:56:09+01:00","dateModified": "2021-02-14T12:56:09+01:00","publisher": {
+            "@type": "Organization",
+            "name": "mbednarski"},"author": {
+                "@type": "Person",
+                "name": "mbednarski"
+            },"description": "post description"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="The Art of Artificial Intelligence">The Art of Artificial Intelligence</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="The Art of Artificial Intelligence">The Art of Artificial Intelligence</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Language Models [02] - EDA</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/about" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>mbednarski</a></span>&nbsp;<span class="post-category">included in <a href="/categories/language-models/"><i class="far fa-folder fa-fw"></i>Language models</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-14">2021-02-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1473 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;7 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="preview.png"
+        data-srcset="/posts/language-models/02-eda/preview.png, preview.png 1.5x, /posts/language-models/02-eda/preview.png 2x"
+        data-sizes="auto"
+        alt="/posts/language-models/02-eda/preview.png"
+        title="post description" /></div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#eda">EDA</a>
+      <ul>
+        <li><a href="#removing-outliers">Removing outliers</a></li>
+        <li><a href="#build-dataset-script">Build dataset script</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>We start the implementation with dataset exploratory analysis and project template.</p>
+<h1 id="project-template">Project template</h1>
+<p>If you want to code along (I strongly reccomend such aproach) you can use any project template you like. The template I will use is following:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="02_structure.png"
+        data-srcset="/posts/language-models/02-eda/02_structure.png, 02_structure.png 1.5x, /posts/language-models/02-eda/02_structure.png 2x"
+        data-sizes="auto"
+        alt="/posts/language-models/02-eda/02_structure.png"
+        title="awd" /></p>
+<p>Going top-down:</p>
+<ul>
+<li><code>char_lm</code> - Directory with model&rsquo;s package</li>
+<li><code>data</code> - All data. It contains multiple subdirectories
+<ul>
+<li><code>raw</code> - Data as downloaded/scrapped/extracted. Read only, no manual manipulations allowed!</li>
+<li><code>interim</code> - Intermediate formats - after prerocessing etc</li>
+<li><code>dataset</code> - Datasets after preparatons, ready to be used by models.</li>
+</ul>
+</li>
+<li><code>models</code> - Storing trained models</li>
+<li><code>notebooks</code> - Jupyter notebooks used for exploration/rough experimentation. No other use allowed!</li>
+<li><code>scripts</code> - Utility scripts that are not part of model package. Distinction between <code>scripts</code> and <code>char_lm</code> is pretty arbitrary</li>
+<li><code>tests</code> - unit tests. Yes we are going to write them.</li>
+<li><code>.pre-commit-config.yaml</code> - I use <a href="https://pre-commit.com/" target="_blank" rel="noopener noreffer">pre-commit</a> to help me keep code quality. Optional</li>
+<li><code>poetry.lock</code>/<code>pyproject.toml</code> - I use <a href="https://python-poetry.org/" target="_blank" rel="noopener noreffer">poetry</a> for installing packages. I encourage you to give a try but it is file to stick with conda/pip</li>
+</ul>
+<p>You can download complete project from <a href="https://github.com/artofai/char-lm" target="_blank" rel="noopener noreffer">https://github.com/artofai/char-lm</a></p>
+<h1 id="dataset">Dataset</h1>
+<p>As I stated in previous part we will start with character language model and make a switch to subword later. For now a good dataset is <a href="https://www.kaggle.com/crawford/us-census-city-and-place-names" target="_blank" rel="noopener noreffer">US Census: City and Place Names</a>. Download and extract it to <code>data/raw/us-city-place-names.csv</code>. Spend a few minuts to familiarize yourself with the data and we will go to exploration.</p>
+<p>Aside</p>
+<p>Try to perform exploratory analysis on your own and and compare your conclusions with mine!</p>
+<p>Complete notebook is avaliable on github: <a href="https://github.com/artofai/char-lm/blob/master/notebooks/cities-eda.ipynb" target="_blank" rel="noopener noreffer">https://github.com/artofai/char-lm/blob/master/notebooks/cities-eda.ipynb</a>.</p>
+<h2 id="eda">EDA</h2>
+<p>First issue is the encoding. If we try to load it with default <code>pd.read_csv</code> settings it will throw a unicode exception. Unfortunatrelly there is no information about encoding on dataset page so I did a small investigation and it looks like ISO-8859-1 (or latin-1 - it&rsquo;s the same) is correct encoding.</p>
+<p>If you would like to read more about dealing with encoding issues leave a comment.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../data/raw/us-city-place-names.csv&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;ISO-8859-1&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">       state_id      state_name                    city
+40583        45           Texas                  Leakey
+46096        50   West Virginia                     Pax
+36000        39            Ohio  Jackson Center village
+25542        30         Montana             Hot Springs
+29099        34  North Carolina                 Lowland
+43780        48           Texas                  Burton
+24541        29        Missouri              Ellisville
+48214        55       Wisconsin        Endeavor village
+6706         12         Florida           Neptune Beach
+25650        31      New Jersey                 Beverly
+</code></pre></td></tr></table>
+</div>
+</div><p>There are three columns. We are interested only in <code>city</code>. Interestingly, we could also utilize information about state but let&rsquo;s leave it for another time.</p>
+<p>There is no nulls (yay) and after deduplicationg city we have about 25000 examples - decent.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">df.isnull().sum()
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">state_id      0
+state_name    0
+city          0
+dtype: int64
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">df_deduplicated = df.drop_duplicates(&#39;city&#39;)
+len(df_deduplicated)
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">24583
+</code></pre></td></tr></table>
+</div>
+</div><p>Analysis of city lengths (in characters)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">cities = df_deduplicated[&#39;city&#39;]
+lens = [len(s) for s in cities]
+sns.distplot(lens, rug=True)
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="city_len_dist.svg"
+        data-srcset="/posts/language-models/02-eda/city_len_dist.svg, city_len_dist.svg 1.5x, /posts/language-models/02-eda/city_len_dist.svg 2x"
+        data-sizes="auto"
+        alt="/posts/language-models/02-eda/city_len_dist.svg"
+        title="/posts/language-models/02-eda/city_len_dist.svg" /></p>
+<p>Distribution looks pretty nice - skewed normal distribution with little tail. Let&rsquo;s take a look on the longest examples:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">cities</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">s</span><span class="p">:</span> <span class="n">s</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">len</span><span class="p">())[</span><span class="o">-</span><span class="mi">20</span><span class="p">:]</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">12555                                South Chicago Heights village
+31898                                Village of the Branch village
+29685                                Peapack and Gladstone borough
+48228                               Fontana-on-Geneva Lake village
+17285                               Lexington-Fayette urban county
+25161                              Village of Four Seasons village
+4160                               El Paso de Robles (Paso Robles)
+22113                              Village of Grosse Pointe Shores
+20047                             Chevy Chase Section Five village
+20048                            Chevy Chase Section Three village
+7642                             Webster County unified government
+30225                           Los Ranchos de Albuquerque village
+7293                         Echols County consolidated government
+16237                  Greeley County unified government (balance)
+7327                  Georgetown-Quitman County unified government
+7254               Cusseta-Chattahoochee County unified government
+7151             Athens-Clarke County unified government (balance)
+42659         Nashville-Davidson metropolitan government (balance)
+17293       Louisville/Jefferson County metro government (balance)
+7155     Augusta-Richmond County consolidated government (balance)
+Name: city, dtype: object
+</code></pre></td></tr></table>
+</div>
+</div><p>I don&rsquo;t live in the US so names with <code>(balance)</code> are a mystery. I will remove them later.</p>
+<p>Next, let&rsquo;s take a look on character distributions:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">char_freq</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">chain</span><span class="o">.</span><span class="n">from_iterable</span><span class="p">(</span><span class="n">cities</span><span class="p">))</span>
+<span class="nb">sorted</span><span class="p">(</span><span class="n">char_freq</span><span class="o">.</span><span class="n">items</span><span class="p">(),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">[(&#39;ñ&#39;, 3),
+ (&#39;/&#39;, 3),
+ (&#39;X&#39;, 4),
+ (&#39;(&#39;, 15),
+ (&#39;)&#39;, 15),
+ (&#34;&#39;&#34;, 27),
+ (&#39;j&#39;, 52),
+ (&#39;Z&#39;, 61),
+ (&#39;Q&#39;, 68),
+ (&#39;-&#39;, 84),
+ (&#39;.&#39;, 108),
+ (&#39;Y&#39;, 134),
+ (&#39;q&#39;, 153),
+ (&#39;U&#39;, 168),
+ (&#39;z&#39;, 295),
+ (&#39;x&#39;, 364),
+ (&#39;J&#39;, 406),
+ (&#39;I&#39;, 424),
+ (&#39;K&#39;, 653),
+ (&#39;V&#39;, 741),
+ (&#39;O&#39;, 762),
+ (&#39;T&#39;, 1042),
+ (&#39;D&#39;, 1069),
+ (&#39;E&#39;, 1110),
+ (&#39;N&#39;, 1134),
+ (&#39;A&#39;, 1233),
+ (&#39;F&#39;, 1300),
+ (&#39;f&#39;, 1362),
+ (&#39;G&#39;, 1444),
+ (&#39;R&#39;, 1551),
+ (&#39;W&#39;, 1714),
+ (&#39;L&#39;, 2002),
+ (&#39;H&#39;, 2075),
+ (&#39;P&#39;, 2166),
+ (&#39;p&#39;, 2257),
+ (&#39;M&#39;, 2564),
+ (&#39;B&#39;, 2647),
+ (&#39;w&#39;, 2708),
+ (&#39;S&#39;, 3132),
+ (&#39;m&#39;, 3292),
+ (&#39;k&#39;, 3484),
+ (&#39;C&#39;, 3518),
+ (&#39;b&#39;, 3550),
+ (&#39;y&#39;, 3772),
+ (&#39;c&#39;, 3874),
+ (&#39;d&#39;, 5645),
+ (&#39;h&#39;, 5900),
+ (&#39;u&#39;, 6361),
+ (&#39;v&#39;, 6445),
+ (&#39;g&#39;, 8222),
+ (&#39;s&#39;, 9229),
+ (&#39;t&#39;, 11389),
+ (&#39; &#39;, 12847),
+ (&#39;n&#39;, 15172),
+ (&#39;r&#39;, 15726),
+ (&#39;i&#39;, 16546),
+ (&#39;o&#39;, 17874),
+ (&#39;a&#39;, 21525),
+ (&#39;l&#39;, 22549),
+ (&#39;e&#39;, 25270)]
+</code></pre></td></tr></table>
+</div>
+</div><p>Looks good, except character <code>ñ</code> and <code>/</code>.</p>
+<h3 id="removing-outliers">Removing outliers</h3>
+<p>According to our analysis, we are going to remove entries containing any of <code>()ñ/</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">idx_to_drop</span> <span class="o">=</span> <span class="n">cities</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;ñ|\/|\(|\)&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">idx_to_drop</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">cities</span><span class="p">[</span><span class="n">idx_to_drop</span><span class="p">])</span>
+<span class="n">cleaned_cities</span> <span class="o">=</span> <span class="n">cities</span><span class="p">[</span><span class="o">~</span><span class="n">idx_to_drop</span><span class="p">]</span>
+<span class="n">cleaned_cities</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">3299                                             Fredonia (Biscoe)
+4160                               El Paso de Robles (Paso Robles)
+4235                                          La Cañada Flintridge
+4398                                    San Buenaventura (Ventura)
+4874                                                    Cañon City
+5051                                           Raymer (New Raymer)
+5130                                             Milford (balance)
+7151             Athens-Clarke County unified government (balance)
+7155     Augusta-Richmond County consolidated government (balance)
+13788                                       Indianapolis (balance)
+16237                  Greeley County unified government (balance)
+17293       Louisville/Jefferson County metro government (balance)
+25497                                   Butte-Silver Bow (balance)
+30199                                                     Española
+40771                                       Naval Air Station/ Jrb
+42575                                  Hartsville/Trousdale County
+42659         Nashville-Davidson metropolitan government (balance)
+47809                                    Addison (Webster Springs)
+47820                                      Bath (Berkeley Springs)
+48039                                         Womelsdorf (Coalton)
+Name: city, dtype: object
+</code></pre></td></tr></table>
+</div>
+</div><p>It is always good to make a sanity check - how much data will be removed and what. THis operation will remove 20 examples - for me removal list looks great.</p>
+<p>At this point I stop the EDA. In <code>cleaned_cities</code> there is a list of cities used for modeling.</p>
+<h3 id="build-dataset-script">Build dataset script</h3>
+<p>We could in theory save dataset from exploratory notebook. But it would be a bad practice - data enbginerring and exploration shouln&rsquo;t be mixed. Because of this let&rsquo;s create a data preprocessing script in <code>scrips/build_dataset.py</code></p>
+<p>Our knowledge from EDA can be trasnferred to a function. We already know what kind of preprocessing want to apply so implementation is straightforward:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">preprocess_dataset</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+    <span class="s2">&#34;&#34;&#34;Preprocesses the cities dataset by removing entries with invalid characters
+</span><span class="s2">
+</span><span class="s2">    Args:
+</span><span class="s2">        df (pd.DataFrame): Source dataframe, requires column &#34;city&#34;
+</span><span class="s2">
+</span><span class="s2">    Returns:
+</span><span class="s2">        List[str]: A list of cleaned cities
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="s2">&#34;city&#34;</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Rows after deduplication: {len(df)}&#34;</span><span class="p">)</span>
+
+    <span class="n">cities</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&#34;city&#34;</span><span class="p">]</span>
+    <span class="n">idx_to_drop</span> <span class="o">=</span> <span class="n">cities</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="sa">r</span><span class="s2">&#34;ñ|\/|\(|\)&#34;</span><span class="p">)</span>
+    <span class="n">cities</span> <span class="o">=</span> <span class="n">cities</span><span class="p">[</span><span class="o">~</span><span class="n">idx_to_drop</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Dropped {idx_to_drop.sum()} outliers&#34;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="n">cities</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Second piece, is to take cleaned cities, split them into train/val/test and save into separate files.
+I also save the full dataset at this step - maybe it will be useful later. To make the process deterministic a random state can be provided.</p>
+<p>Alert</p>
+<p>Ability to reproduce your results is important, consider every place where using random generatores saving seed value</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">split_and_save</span><span class="p">(</span><span class="n">cities</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">out_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">random_state</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="s2">&#34;&#34;&#34;Splits dataset into train/val/test and saves to text files
+</span><span class="s2">
+</span><span class="s2">    Args:
+</span><span class="s2">        cities (List[str]): List of cleaned cities
+</span><span class="s2">        out_dir (Path): Output directory. Will be created if not exists
+</span><span class="s2">        random_state (int): Random state for splitting
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="n">out_dir</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Saving results to {out_dir}&#34;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="p">(</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">&#34;full.txt&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;wt&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cities</span><span class="p">))</span>
+
+    <span class="n">keeep_set</span><span class="p">,</span> <span class="n">test_set</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+        <span class="n">cities</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span>
+    <span class="p">)</span>
+
+    <span class="n">train_set</span><span class="p">,</span> <span class="n">val_set</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span>
+        <span class="n">keeep_set</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">random_state</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="p">)</span>
+
+    <span class="k">with</span> <span class="p">(</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">&#34;train.txt&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;wt&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">train_set</span><span class="p">))</span>
+    <span class="k">with</span> <span class="p">(</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">&#34;val.txt&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;wt&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">val_set</span><span class="p">))</span>
+    <span class="k">with</span> <span class="p">(</span><span class="n">out_dir</span> <span class="o">/</span> <span class="s2">&#34;test.txt&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;wt&#34;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&#34;utf-8&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">test_set</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Building blocks are ready now we can create a simple command line interface using click. We would like to pass the raw, input file, the output directory, specify encoding of the input file and a random state.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="nd">@click.command</span><span class="p">()</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s2">&#34;--input-path&#34;</span><span class="p">,</span> <span class="s2">&#34;-i&#34;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s2">&#34;--output-dir&#34;</span><span class="p">,</span> <span class="s2">&#34;-o&#34;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s2">&#34;--encoding&#34;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&#34;ISO-8859-1&#34;</span><span class="p">)</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s2">&#34;--random-state&#34;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">input_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">42</span><span class="p">):</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+    <span class="n">input_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">input_path</span><span class="p">)</span>
+    <span class="n">output_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Reading file {input_path} with encoding {encoding}&#34;</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">input_path</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="n">encoding</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Read {len(df)} rows&#34;</span><span class="p">)</span>
+
+    <span class="n">cities</span> <span class="o">=</span> <span class="n">preprocess_dataset</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+    <span class="n">split_and_save</span><span class="p">(</span><span class="n">cities</span><span class="p">,</span> <span class="n">output_dir</span><span class="p">,</span> <span class="n">random_state</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&#34;Done.&#34;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-02-14</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://www.artofai.io/posts/language-models/02-eda/" data-title="Language Models [02] - EDA" data-hashtags="nlp,language models,pytorch"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://www.artofai.io/posts/language-models/02-eda/" data-hashtag="nlp"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://www.artofai.io/posts/language-models/02-eda/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://www.artofai.io/posts/language-models/02-eda/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="https://www.artofai.io/posts/language-models/02-eda/" data-title="Language Models [02] - EDA"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/nlp/">nlp</a>,&nbsp;<a href="/tags/language-models/">language models</a>,&nbsp;<a href="/tags/pytorch/">pytorch</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+            <a href="/posts/language-models/01-theory/" class="next" rel="next" title="Language Models [01] - Intro and theory">Language Models [01] - Intro and theory<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about" target="_blank">mbednarski</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>
