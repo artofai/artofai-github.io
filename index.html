@@ -10,7 +10,7 @@
 <meta property="og:description" content="About AI, NLP and computer science" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://www.artofai.io/" />
-<meta property="og:updated_time" content="2021-02-28T15:47:38+01:00" />
+<meta property="og:updated_time" content="2021-02-14T12:56:09+01:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="The Art of Artificial Intelligence"/>
 <meta name="twitter:description" content="About AI, NLP and computer science"/>
@@ -36,7 +36,7 @@
             <a href="/" title="The Art of Artificial Intelligence">The Art of Artificial Intelligence</a>
         </div>
         <div class="menu">
-            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
                         <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
                             <i class="fas fa-search fa-fw"></i>
@@ -79,7 +79,7 @@
                     <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
                         Cancel
                     </a>
-                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
                 <i class="fas fa-adjust fa-fw"></i>
             </a></div>
     </div>
@@ -94,28 +94,43 @@
                 <div class="container"><div class="page home" posts><div class="home-profile"><div class="home-avatar"><a href="/posts/" title="Posts"><img
         class="lazyload"
         src="/svg/loading.min.svg"
-        data-src="/images/avatar.png"
-        data-srcset="/images/avatar.png, /images/avatar.png 1.5x, /images/avatar.png 2x"
+        data-src="/logo.png"
+        data-srcset="/logo.png, /logo.png 1.5x, /logo.png 2x"
         data-sizes="auto"
-        alt="/images/avatar.png"
-        title="/images/avatar.png" /></a></div><h2 class="home-subtitle"><div id="id-1" class="typeit"></div></h2><div class="links"><a href="https://github.com/mbednarski" title="GitHub" target="_blank" rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href="https://linkedin.com/in/mbednarski-ai" title="LinkedIn" target="_blank" rel="noopener noreffer me"><i class="fab fa-linkedin fa-fw"></i></a><a href="https://www.instagram.com/mbednarski.ai" title="Instagram" target="_blank" rel="noopener noreffer me"><i class="fab fa-instagram fa-fw"></i></a><a href="https://medium.com/@mbednarski" title="Medium" target="_blank" rel="noopener noreffer me"><i class="fab fa-medium fa-fw"></i></a></div></div>
-<article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/posts/language-models-02/">Language Models 02</a>
-    </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>mbednarski</a></span>&nbsp;<span class="post-publish">published on <time datetime="2021-02-28">2021-02-28</time></span></div><div class="content">We start the implementation with dataset exploratory analysis and project template.
-Project template If you want to code along (I strongly reccomend such aproach) you can use any project template you like. The template I will use is following:
-Going top-down:
- char_lm - Directory with model&rsquo;s package data - All data. It contains multiple subdirectories  raw - Data as downloaded/scrapped/extracted. Read only, no manual manipulations allowed! interim - Intermediate formats - after prerocessing etc dataset - Datasets after preparatons, ready to be used by models.</div><div class="post-footer">
-        <a href="/posts/language-models-02/">Read More</a></div>
-</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><h1 class="single-title" itemprop="name headline">
-        <a href="/posts/language-models-01/">Language Models 01</a>
-    </h1><div class="post-meta"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>mbednarski</a></span>&nbsp;<span class="post-publish">published on <time datetime="2021-02-14">2021-02-14</time></span></div><div class="content">If there is one single topic I could reccomend to learn for every person learning NLP - that would be language models.
-Chances that you will need to implement a LM in your work are very small. But concepts you can learn are priceless. A lot of NLP topics like sequence to sequence models, machine translation, summarization - or even famous transformer models are built on top of lanaguage models. Of course they also have some direct applications.</div><div class="post-footer">
-        <a href="/posts/language-models-01/">Read More</a><div class="post-tags">
-                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/nlp/">nlp</a>,&nbsp;<a href="/tags/language-models/">language-models</a>,&nbsp;<a href="/tags/pytorch/">pytorch</a></div></div>
+        alt="/logo.png"
+        title="/logo.png" /></a></div><h1 class="home-title">The Art of Artificial Intelligence</h1><h2 class="home-subtitle"><div id="id-1" class="typeit"></div></h2><div class="links"><a href="https://github.com/mbednarski" title="GitHub" target="_blank" rel="noopener noreffer me"><i class="fab fa-github-alt fa-fw"></i></a><a href="https://linkedin.com/in/mbednarski-ai" title="LinkedIn" target="_blank" rel="noopener noreffer me"><i class="fab fa-linkedin fa-fw"></i></a><a href="https://www.instagram.com/mbednarski.ai" title="Instagram" target="_blank" rel="noopener noreffer me"><i class="fab fa-instagram fa-fw"></i></a><a href="https://medium.com/@mbednarski" title="Medium" target="_blank" rel="noopener noreffer me"><i class="fab fa-medium fa-fw"></i></a></div><h3 class="home-disclaimer">disclaimer</h3></div>
+<article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+            <a href="/posts/language-models/02/"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="preview.png"
+        data-srcset="/posts/language-models/02/preview.png, preview.png 1.5x, /posts/language-models/02/preview.png 2x"
+        data-sizes="auto"
+        alt="/posts/language-models/02/preview.png"
+        title="post description" /></a>
+        </div><h1 class="single-title" itemprop="name headline">
+        <a href="/posts/language-models/02/">Language Models - EDA</a>
+    </h1><div class="post-meta"><span class="post-author"><a href="/about" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>mbednarski</a></span>&nbsp;<span class="post-publish">published on <time datetime="2021-02-14">2021-02-14</time></span>&nbsp;<span class="post-category">included in <a href="/categories/language-models/"><i class="far fa-folder fa-fw"></i>Language models</a></span></div><div class="content">post description</div><div class="post-footer">
+        <a href="/posts/language-models/02/">Read More</a><div class="post-tags">
+                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/nlp/">nlp</a>,&nbsp;<a href="/tags/language-models/">language models</a>,&nbsp;<a href="/tags/pytorch/">pytorch</a></div></div>
+</article><article class="single summary" itemscope itemtype="http://schema.org/Article"><div class="featured-image-preview">
+            <a href="/posts/language-models/01/"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="preview.png"
+        data-srcset="/posts/language-models/01/preview.png, preview.png 1.5x, /posts/language-models/01/preview.png 2x"
+        data-sizes="auto"
+        alt="/posts/language-models/01/preview.png"
+        title="post description" /></a>
+        </div><h1 class="single-title" itemprop="name headline">
+        <a href="/posts/language-models/01/">Language Models 01 - Intro and theory</a>
+    </h1><div class="post-meta"><span class="post-author"><a href="/about" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>mbednarski</a></span>&nbsp;<span class="post-publish">published on <time datetime="2021-02-14">2021-02-14</time></span>&nbsp;<span class="post-category">included in <a href="/categories/language-models/"><i class="far fa-folder fa-fw"></i>Language models</a></span></div><div class="content">post description</div><div class="post-footer">
+        <a href="/posts/language-models/01/">Read More</a><div class="post-tags">
+                <i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/nlp/">nlp</a>,&nbsp;<a href="/tags/language-models/">language models</a>,&nbsp;<a href="/tags/pytorch/">pytorch</a></div></div>
 </article></div></div>
             </main><footer class="footer">
         <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
-                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">mbednarski</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about" target="_blank">mbednarski</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 
@@ -124,5 +139,5 @@ Chances that you will need to implement a LM in your work are very small. But co
             </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
                 <i class="fas fa-comment fa-fw"></i>
             </a>
-        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"data":{"id-1":"This is My New Hugo Site"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","lunrIndexURL":"/index.json","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30,"type":"lunr"},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/typeit/typeit.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"data":{"id-1":"About AI, NLP and computer science"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30},"typeit":{"cursorChar":"|","cursorSpeed":1000,"data":{"id-1":["id-1"]},"duration":-1,"speed":100}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
 </html>

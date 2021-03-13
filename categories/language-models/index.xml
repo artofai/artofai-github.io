@@ -1,9 +1,9 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
-        <title>language models - Tag - The Art of Artificial Intelligence</title>
-        <link>https://www.artofai.io/tags/language-models/</link>
-        <description>language models - Tag - The Art of Artificial Intelligence</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 14 Feb 2021 12:56:09 &#43;0100</lastBuildDate><atom:link href="https://www.artofai.io/tags/language-models/" rel="self" type="application/rss+xml" /><item>
+        <title>Language models - Category - The Art of Artificial Intelligence</title>
+        <link>https://www.artofai.io/categories/language-models/</link>
+        <description>Language models - Category - The Art of Artificial Intelligence</description>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 14 Feb 2021 12:56:09 &#43;0100</lastBuildDate><atom:link href="https://www.artofai.io/categories/language-models/" rel="self" type="application/rss+xml" /><item>
     <title>Language Models - EDA</title>
     <link>https://www.artofai.io/posts/language-models/02/</link>
     <pubDate>Sun, 14 Feb 2021 12:56:09 &#43;0100</pubDate>
