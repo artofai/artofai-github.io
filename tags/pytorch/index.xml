@@ -10,7 +10,7 @@
     <author>Author</author>
     <guid>https://www.artofai.io/posts/language-models/01-theory/</guid>
     <description><![CDATA[<div class="featured-image">
-                <img src="/preview.png" referrerpolicy="no-referrer">
+                <img src="/baner_artofai.jpg" referrerpolicy="no-referrer">
             </div>post description]]></description>
 </item><item>
     <title>Language Models [02] - EDA</title>
@@ -18,6 +18,15 @@
     <pubDate>Sun, 14 Feb 2021 12:56:09 &#43;0100</pubDate>
     <author>Author</author>
     <guid>https://www.artofai.io/posts/language-models/02-eda/</guid>
+    <description><![CDATA[<div class="featured-image">
+                <img src="/preview.png" referrerpolicy="no-referrer">
+            </div>post description]]></description>
+</item><item>
+    <title>Language Models [03] - Tokenizer</title>
+    <link>https://www.artofai.io/posts/language-models/03-tokenizer/</link>
+    <pubDate>Sun, 14 Feb 2021 12:56:09 &#43;0100</pubDate>
+    <author>Author</author>
+    <guid>https://www.artofai.io/posts/language-models/03-tokenizer/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/preview.png" referrerpolicy="no-referrer">
             </div>post description]]></description>

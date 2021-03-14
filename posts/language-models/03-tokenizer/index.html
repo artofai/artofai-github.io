@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Language Models [03] - Tokenizer - The Art of Artificial Intelligence</title><meta name="Description" content="post description"><meta property="og:title" content="Language Models [03] - Tokenizer" />
+<meta property="og:description" content="post description" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.artofai.io/posts/language-models/03-tokenizer/" />
+<meta property="article:published_time" content="2021-02-14T12:56:09+01:00" />
+<meta property="article:modified_time" content="2021-02-14T12:56:09+01:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Language Models [03] - Tokenizer"/>
+<meta name="twitter:description" content="post description"/>
+<meta name="application-name" content="The Art of Artificial Intelligence">
+<meta name="apple-mobile-web-app-title" content="The Art of Artificial Intelligence"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.artofai.io/posts/language-models/03-tokenizer/" /><link rel="next" href="https://www.artofai.io/posts/language-models/02-eda/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Language Models [03] - Tokenizer",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.artofai.io\/posts\/language-models\/03-tokenizer\/"
+        },"genre": "posts","keywords": "nlp, language models, pytorch","wordcount":  1139 ,
+        "url": "https:\/\/www.artofai.io\/posts\/language-models\/03-tokenizer\/","datePublished": "2021-02-14T12:56:09+01:00","dateModified": "2021-02-14T12:56:09+01:00","publisher": {
+            "@type": "Organization",
+            "name": "mbednarski"},"author": {
+                "@type": "Person",
+                "name": "mbednarski"
+            },"description": "post description"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="The Art of Artificial Intelligence">The Art of Artificial Intelligence</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="The Art of Artificial Intelligence">The Art of Artificial Intelligence</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Language Models [03] - Tokenizer</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/about" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>mbednarski</a></span>&nbsp;<span class="post-category">included in <a href="/categories/language-models/"><i class="far fa-folder fa-fw"></i>Language models</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-14">2021-02-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1139 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;6 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="preview.png"
+        data-srcset="preview.png, preview.png 1.5x, preview.png 2x"
+        data-sizes="auto"
+        alt="preview.png"
+        title="post description" /></div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#creating-tokenizer-interface">Creating tokenizer interface</a></li>
+    <li><a href="#init">Init</a></li>
+    <li><a href="#fit">Fit</a>
+      <ul>
+        <li><a href="#out-of-vocabulary">Out of vocabulary</a></li>
+      </ul>
+    </li>
+    <li><a href="#get-vocab-size">Get vocab size</a></li>
+    <li><a href="#encode">Encode</a></li>
+    <li><a href="#encode-batch">Encode batch</a></li>
+    <li><a href="#decode">Decode</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>First component we are going to build is a tokenizer. For character level model it is very simple but we will create an implementation that can be easily extended later.</p>
+<p>Before we code, le&rsquo;ts think about requirements. Rough bullet points can be:</p>
+<ul>
+<li>splitting text on characters</li>
+<li>crating vocabulary from corpus</li>
+<li>encoding text (chainging tokens to integers)</li>
+<li>decoding text (integers to tokens)</li>
+<li>handling out of vocabulary tokens</li>
+<li>serializing to file</li>
+<li>loading from file</li>
+</ul>
+<p>Quite a lot for a simple tokenizer.</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Full source code is located at the bottom of the post or on github</div>
+        </div>
+    </div>
+<h2 id="creating-tokenizer-interface">Creating tokenizer interface</h2>
+<p>For first I&rsquo;m going to define the interface of tokenizer - list of methods and their responsibiltiies.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">CharacterTokenizer</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;Fits tokenizer on text file. 
+</span><span class="s2">        Vocabulary is created from all characters from file.&#34;&#34;&#34;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">get_vocab_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="s2">&#34;&#34;&#34;Returns size of the vocabulary&#34;&#34;&#34;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">:</span>
+        <span class="s2">&#34;&#34;&#34;Encodes a single string&#34;&#34;&#34;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">encode_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="o">=</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;Encodes a batch of strings and pads them to the longest one&#34;&#34;&#34;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="s2">&#34;&#34;&#34;Decodes string from 1-D tensor&#34;&#34;&#34;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">decode_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span><span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+        <span class="s2">&#34;&#34;&#34;Decodes list of strings from a 2-D tensor&#34;&#34;&#34;</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="nf">to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;Saves the tokenizer to a file&#34;&#34;&#34;</span>
+        <span class="k">pass</span>
+    
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterTokenizer</span><span class="p">:</span>
+        <span class="s2">&#34;&#34;&#34;Instantiates a tokenizer from file&#34;&#34;&#34;</span>
+        <span class="k">pass</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">If you are not familiar with type hints - i encourage you to use them!</div>
+        </div>
+    </div>
+<p>They should cover all our requirements. We will implement them more or less in given order.</p>
+<h2 id="init">Init</h2>
+<p>In <code>__init__</code> we will define special tokens. The model will use <code>sos</code>,<code>eos</code>,<code>oov</code>,<code>pad</code>. To make life easier they will be represented as single characters (instead of strings like <code>[sos]</code>). Additionally, we fix index of <code>pad</code> token - it&rsquo;s going to help us later.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sos_token</span> <span class="o">=</span> <span class="s2">&#34;^&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eos_token</span> <span class="o">=</span> <span class="s2">&#34;$&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oov_token</span> <span class="o">=</span> <span class="s2">&#34;@&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pad_token</span> <span class="o">=</span> <span class="s2">&#34;#&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pad_index</span> <span class="o">=</span> <span class="mi">0</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Every time a special token will be referenced - it will use those fields.</p>
+<h2 id="fit">Fit</h2>
+<p>Fit method takes a path to a text file and uses it to create a vocabulary and token-index mapping.</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Every time I need a filepath I use <code>Path</code> class from <code>pathlib</code> module. It is high-level replacement for ordinary strings making path manipulations safer. You can read more here: <a href="https://treyhunner.com/2018/12/why-you-should-be-using-pathlib/">https://treyhunner.com/2018/12/why-you-should-be-using-pathlib/</a></div>
+        </div>
+    </div>
+<p>We load all text from file and remove newlines - as city names should not contain them.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">corpus_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;rt&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>To get unique characters we can use <code>Counter</code> from <code>collections</code> and log 10 most common characters - to have a sanity check.</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Instead of <code>print</code> there is <code>logger.info</code> call. I will write a separate article on how and why use it. For now can use <code>print</code>.</div>
+        </div>
+    </div>
+<p>Next we construct a mapping from index of character to actual character. We need to include all special tokens and all tokens from vocabulary.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="bp">self</span><span class="o">.</span><span class="n">idx2tok</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+    <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pad_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sos_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eos_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">oov_token</span><span class="p">]</span>
+    <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">vocab</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>We also need a reverse one:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="bp">self</span><span class="o">.</span><span class="n">tok2idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">tok</span><span class="p">:</span> <span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">tok</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idx2tok</span><span class="p">)}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>After fitting they can look like:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">idx2tok
+[&#39;#&#39;, &#39;^&#39;, &#39;$&#39;, &#39;@&#39;, &#39;A&#39;, &#39;b&#39;, &#39;e&#39;, &#39;v&#39;, &#39;i&#39;, &#39;l&#39;, &#39;r&#39;, &#39;n&#39;, &#39;a&#39;, &#39;t&#39;, &#39;d&#39;, &#39;m&#39;, &#39;s&#39;,
+ &#39;o&#39;, &#39;g&#39;, &#39;k&#39;, &#39;x&#39;, &#39; &#39;, &#39;C&#39;, &#39;y&#39;, &#39;c&#39;, &#39;p&#39;, &#39;u&#39;, &#39;h&#39;, &#39;f&#39;, &#39;U&#39;, &#39;B&#39;, &#39;M&#39;, &#39;L&#39;, &#39;w&#39;,
+ &#39;z&#39;, &#39;S&#39;, &#39;H&#39;, &#39;D&#39;, &#39;I&#39;, &#39;P&#39;, &#39;E&#39;, &#39;T&#39;, &#39;q&#39;, &#39;F&#39;, &#39;R&#39;, &#39;G&#39;, &#39;J&#39;, &#39;K&#39;, &#39;W&#39;, &#39;O&#39;, &#39;V&#39;,
+ &#39;N&#39;, &#39;Q&#39;, &#39;Y&#39;, &#39;-&#39;, &#34;&#39;&#34;, &#39;.&#39;, &#39;j&#39;, &#39;Z&#39;, &#39;X&#39;]
+
+tok2idx
+{&#39;#&#39;: 0, &#39;^&#39;: 1, &#39;$&#39;: 2, &#39;@&#39;: 3, &#39;A&#39;: 4, &#39;b&#39;: 5, &#39;e&#39;: 6, &#39;v&#39;: 7, &#39;i&#39;: 8, &#39;l&#39;: 9,
+ &#39;r&#39;: 10, &#39;n&#39;: 11, &#39;a&#39;: 12, &#39;t&#39;: 13, &#39;d&#39;: 14, &#39;m&#39;: 15, &#39;s&#39;: 16, &#39;o&#39;: 17, &#39;g&#39;: 18,
+ &#39;k&#39;: 19, &#39;x&#39;: 20, &#39; &#39;: 21, &#39;C&#39;: 22, &#39;y&#39;: 23, &#39;c&#39;: 24, &#39;p&#39;: 25, &#39;u&#39;: 26, &#39;h&#39;: 27,
+ &#39;f&#39;: 28, &#39;U&#39;: 29, &#39;B&#39;: 30, &#39;M&#39;: 31, &#39;L&#39;: 32, &#39;w&#39;: 33, &#39;z&#39;: 34, &#39;S&#39;: 35, &#39;H&#39;: 36,
+ &#39;D&#39;: 37, &#39;I&#39;: 38, &#39;P&#39;: 39, &#39;E&#39;: 40, &#39;T&#39;: 41, &#39;q&#39;: 42, &#39;F&#39;: 43, &#39;R&#39;: 44, &#39;G&#39;: 45,
+ &#39;J&#39;: 46, &#39;K&#39;: 47, &#39;W&#39;: 48, &#39;O&#39;: 49, &#39;V&#39;: 50, &#39;N&#39;: 51, &#39;Q&#39;: 52, &#39;Y&#39;: 53, &#39;-&#39;: 54,
+ &#34;&#39;&#34;: 55, &#39;.&#39;: 56, &#39;j&#39;: 57, &#39;Z&#39;: 58, &#39;X&#39;: 59})
+</code></pre></td></tr></table>
+</div>
+</div><p>Special tokens are located on top, followed by regular tokens in desceding frequency order. With both of them we can easily map between text and numeric representation</p>
+<h3 id="out-of-vocabulary">Out of vocabulary</h3>
+<p>If we try to get index for out of vocabulary token there will be an error:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">self.tok2idx[&#39;?&#39;]
+Traceback (most recent call last):
+  File &#34;&lt;string&gt;&#34;, line 1, in &lt;module&gt;
+KeyError: &#39;?&#39;
+</code></pre></td></tr></table>
+</div>
+</div><p>Clearly, <code>?</code> is out of vocabulary and does not exist in vocab. In such situation, we should return <code>oov</code> token. Easiest way is to wrap <code>tok2idx</code> into a <code>defaultdict</code>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">self.tok2idx = defaultdict(
+    lambda: self.tok2idx[self.oov_token], self.tok2idx
+)
+</code></pre></td></tr></table>
+</div>
+</div><p>Try again</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">tok2idx[&#39;?&#39;]
+3
+tok2idx[&#39;;&#39;]
+3
+</code></pre></td></tr></table>
+</div>
+</div><p>We got index, is it correct?</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">idx2tok[3]
+&#39;@&#39;
+</code></pre></td></tr></table>
+</div>
+</div><p>Yes, <code>@</code> is our <code>oov</code> token.</p>
+<p>Last small step is to log a simple summary</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">logger.info(f&#34;Created vocabulary with {self.get_vocab_size()} tokens&#34;)
+</code></pre></td></tr></table>
+</div>
+</div><p>We can make a quick test, at the end of file add (you can ignore logger config)</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+    <span class="n">ct</span> <span class="o">=</span> <span class="n">CharacterTokenizer</span><span class="p">()</span>
+    <span class="n">ct</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&#34;data/dataset/city/full.txt&#34;</span><span class="p">))</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">FO:__main__:Most frequent tokens [(&#39;e&#39;, 25216), (&#39;l&#39;, 22518), (&#39;a&#39;, 21478), (&#39;o&#39;, 17837), (&#39;i&#39;, 16520), (&#39;r&#39;, 15699), (&#39;n&#39;, 15127), (&#39; &#39;, 12802), (&#39;t&#39;, 11361), (&#39;s&#39;, 9208)]
+INFO:__main__:Created vocabulary with 60 tokens
+</code></pre></td></tr></table>
+</div>
+</div><p>Looks good.</p>
+<h2 id="get-vocab-size">Get vocab size</h2>
+<p>This one is trivial:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">get_vocab_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tok2idx</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="encode">Encode</h2>
+<p>The heart of tokenizer. We can imagine that sometimes we want to include special tokens and sometimes no - we can handle both scenarios.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">include_special_tokens</span><span class="p">:</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sos_token</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">eos_token</span><span class="p">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Encoding is also easy: just replace every character with numeric representation and cast it to a tensor. We already have <code>oov</code> support!</p>
+<h2 id="encode-batch">Encode batch</h2>
+<p>As we train model in batches it is useful to have a method for direct batch encoding. Just apply <code>encode</code> on each string from list.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">encode_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="o">=</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="n">encoded</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="n">include_special_tokens</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">texts</span>
+    <span class="p">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="decode">Decode</h2>
+<p>This one is similar - just do it other way around. Here we do not care about <code>oov</code> at all.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+    <span class="n">decoded</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx2tok</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">t</span><span class="p">]</span>
+    <span class="k">return</span> <span class="s2">&#34;&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decoded</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-02-14</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://www.artofai.io/posts/language-models/03-tokenizer/" data-title="Language Models [03] - Tokenizer" data-hashtags="nlp,language models,pytorch"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://www.artofai.io/posts/language-models/03-tokenizer/" data-hashtag="nlp"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://www.artofai.io/posts/language-models/03-tokenizer/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://www.artofai.io/posts/language-models/03-tokenizer/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="https://www.artofai.io/posts/language-models/03-tokenizer/" data-title="Language Models [03] - Tokenizer"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/nlp/">nlp</a>,&nbsp;<a href="/tags/language-models/">language models</a>,&nbsp;<a href="/tags/pytorch/">pytorch</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav">
+            <a href="/posts/language-models/02-eda/" class="next" rel="next" title="Language Models [02] - EDA">Language Models [02] - EDA<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about" target="_blank">mbednarski</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":10},"comment":{},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

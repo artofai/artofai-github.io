@@ -17,7 +17,7 @@
 <meta name="application-name" content="The Art of Artificial Intelligence">
 <meta name="apple-mobile-web-app-title" content="The Art of Artificial Intelligence"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.artofai.io/posts/language-models/02-eda/" /><link rel="next" href="https://www.artofai.io/posts/language-models/01-theory/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.artofai.io/posts/language-models/02-eda/" /><link rel="prev" href="https://www.artofai.io/posts/language-models/03-tokenizer/" /><link rel="next" href="https://www.artofai.io/posts/language-models/01-theory/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -119,16 +119,18 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
+    <li><a href="#project-template">Project template</a></li>
+    <li><a href="#dataset">Dataset</a></li>
     <li><a href="#eda">EDA</a>
       <ul>
         <li><a href="#removing-outliers">Removing outliers</a></li>
-        <li><a href="#build-dataset-script">Build dataset script</a></li>
       </ul>
     </li>
+    <li><a href="#build-dataset-script">Build dataset script</a></li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><p>We start the implementation with dataset exploratory analysis and project template.</p>
-<h1 id="project-template">Project template</h1>
+<h2 id="project-template">Project template</h2>
 <p>If you want to code along (I strongly reccomend such aproach) you can use any project template you like. The template I will use is following:</p>
 <p><img
         class="lazyload"
@@ -156,7 +158,7 @@
 <li><code>poetry.lock</code>/<code>pyproject.toml</code> - I use <a href="https://python-poetry.org/" target="_blank" rel="noopener noreffer">poetry</a> for installing packages. I encourage you to give a try but it is file to stick with conda/pip</li>
 </ul>
 <p>You can download complete project from <a href="https://github.com/artofai/char-lm" target="_blank" rel="noopener noreffer">https://github.com/artofai/char-lm</a></p>
-<h1 id="dataset">Dataset</h1>
+<h2 id="dataset">Dataset</h2>
 <p>As I stated in previous part we will start with character language model and make a switch to subword later. For now a good dataset is <a href="https://www.kaggle.com/crawford/us-census-city-and-place-names" target="_blank" rel="noopener noreffer">US Census: City and Place Names</a>. Download and extract it to <code>data/raw/us-city-place-names.csv</code>. Spend a few minuts to familiarize yourself with the data and we will go to exploration.</p>
 <p>Aside</p>
 <p>Try to perform exploratory analysis on your own and and compare your conclusions with mine!</p>
@@ -529,7 +531,7 @@ Name: city, dtype: object
 </div>
 </div><p>It is always good to make a sanity check - how much data will be removed and what. THis operation will remove 20 examples - for me removal list looks great.</p>
 <p>At this point I stop the EDA. In <code>cleaned_cities</code> there is a list of cities used for modeling.</p>
-<h3 id="build-dataset-script">Build dataset script</h3>
+<h2 id="build-dataset-script">Build dataset script</h2>
 <p>We could in theory save dataset from exploratory notebook. But it would be a bad practice - data enbginerring and exploration shouln&rsquo;t be mixed. Because of this let&rsquo;s create a data preprocessing script in <code>scrips/build_dataset.py</code></p>
 <p>Our knowledge from EDA can be trasnferred to a function. We already know what kind of preprocessing want to apply so implementation is straightforward:</p>
 <div class="highlight"><div class="chroma">
@@ -576,8 +578,14 @@ Name: city, dtype: object
 </div>
 </div><p>Second piece, is to take cleaned cities, split them into train/val/test and save into separate files.
 I also save the full dataset at this step - maybe it will be useful later. To make the process deterministic a random state can be provided.</p>
-<p>Alert</p>
-<p>Ability to reproduce your results is important, consider every place where using random generatores saving seed value</p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>Tip<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Ability to reproduce your results is important, consider every place where using random generatores saving seed value</div>
+        </div>
+    </div>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -716,7 +724,7 @@ I also save the full dataset at this step - maybe it will be useful later. To ma
         </section>
     </div>
 
-    <div class="post-nav">
+    <div class="post-nav"><a href="/posts/language-models/03-tokenizer/" class="prev" rel="prev" title="Language Models [03] - Tokenizer"><i class="fas fa-angle-left fa-fw"></i>Language Models [03] - Tokenizer</a>
             <a href="/posts/language-models/01-theory/" class="next" rel="next" title="Language Models [01] - Intro and theory">Language Models [01] - Intro and theory<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
