@@ -3,16 +3,7 @@
         <title>language models - Tag - The Art of Artificial Intelligence</title>
         <link>https://www.artofai.io/tags/language-models/</link>
         <description>language models - Tag - The Art of Artificial Intelligence</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 14 Mar 2021 18:57:09 &#43;0100</lastBuildDate><atom:link href="https://www.artofai.io/tags/language-models/" rel="self" type="application/rss+xml" /><item>
-    <title>Language Models [03] - Tokenizer</title>
-    <link>https://www.artofai.io/posts/language-models/03-tokenizer/</link>
-    <pubDate>Sun, 14 Mar 2021 18:57:09 &#43;0100</pubDate>
-    <author>Author</author>
-    <guid>https://www.artofai.io/posts/language-models/03-tokenizer/</guid>
-    <description><![CDATA[<div class="featured-image">
-                <img src="/img_lm_03.jpg" referrerpolicy="no-referrer">
-            </div>Build the first component: a custom tokenizer]]></description>
-</item><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 01 Mar 2021 12:56:09 &#43;0100</lastBuildDate><atom:link href="https://www.artofai.io/tags/language-models/" rel="self" type="application/rss+xml" /><item>
     <title>Language Models [02] - EDA</title>
     <link>https://www.artofai.io/posts/language-models/02-eda/</link>
     <pubDate>Mon, 01 Mar 2021 12:56:09 &#43;0100</pubDate>
