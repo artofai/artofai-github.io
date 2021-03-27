@@ -9,8 +9,8 @@
 <meta property="og:description" content="Build the first component: a custom tokenizer" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://www.artofai.io/posts/language-models/03-tokenizer/" />
-<meta property="article:published_time" content="2021-03-14T18:57:09+01:00" />
-<meta property="article:modified_time" content="2021-03-14T18:57:09+01:00" />
+<meta property="article:published_time" content="2021-03-27T21:00:00+01:00" />
+<meta property="article:modified_time" content="2021-03-27T21:00:00+01:00" />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Language Models [03] - Tokenizer"/>
 <meta name="twitter:description" content="Build the first component: a custom tokenizer"/>
@@ -26,8 +26,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.artofai.io\/posts\/language-models\/03-tokenizer\/"
-        },"genre": "posts","keywords": "nlp, language models, pytorch","wordcount":  1208 ,
-        "url": "https:\/\/www.artofai.io\/posts\/language-models\/03-tokenizer\/","datePublished": "2021-03-14T18:57:09+01:00","dateModified": "2021-03-14T18:57:09+01:00","publisher": {
+        },"genre": "posts","keywords": "nlp, language models, pytorch","wordcount":  3507 ,
+        "url": "https:\/\/www.artofai.io\/posts\/language-models\/03-tokenizer\/","datePublished": "2021-03-27T21:00:00+01:00","dateModified": "2021-03-27T21:00:00+01:00","publisher": {
             "@type": "Organization",
             "name": "mbednarski"},"author": {
                 "@type": "Person",
@@ -103,8 +103,8 @@
             <div class="toc-content always-active" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Language Models [03] - Tokenizer</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/about" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>mbednarski</a></span>&nbsp;<span class="post-category">included in <a href="/categories/language-models/"><i class="far fa-folder fa-fw"></i>Language models</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-03-14">2021-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1208 words&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;6 minutes&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-03-27">2021-03-27</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;3507 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;17 minutes&nbsp;</div>
         </div><div class="featured-image"><img
         class="lazyload"
         src="/svg/loading.min.svg"
@@ -129,25 +129,37 @@
             <li><a href="#out-of-vocabulary">Out of vocabulary</a></li>
           </ul>
         </li>
+        <li><a href="#get-vocab-size">Get vocab size</a></li>
+        <li><a href="#encode">Encode</a></li>
+        <li><a href="#encode-batch">Encode batch</a></li>
+        <li><a href="#decode">Decode</a></li>
+        <li><a href="#to-file">To file</a></li>
+        <li><a href="#from-file">From file</a></li>
       </ul>
     </li>
-    <li><a href="#get-vocab-size">Get vocab size</a></li>
-    <li><a href="#encode">Encode</a></li>
-    <li><a href="#encode-batch">Encode batch</a></li>
-    <li><a href="#decode">Decode</a></li>
+    <li><a href="#command-line-interface">Command line interface</a></li>
+    <li><a href="#unit-testing">Unit testing</a>
+      <ul>
+        <li><a href="#first-test-and-fixtures">First test and fixtures</a></li>
+        <li><a href="#test-encode-decode">Test encode-decode</a></li>
+        <li><a href="#fixtures-once-again">Fixtures once again</a></li>
+      </ul>
+    </li>
+    <li><a href="#summary">Summary</a></li>
+    <li><a href="#full-source-code">Full source code</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><p>First component we are going to build is a tokenizer. For character level model it is very simple but we will create an implementation that can be easily extended later.</p>
-<div class="details admonition info open">
+            </div><div class="content" id="content"><p>The first component we are going to build is a tokenizer. For the character-level model, it is very simple. But we will create an implementation that can be extended later wit ease.</p>
+<div class="details admonition abstract open">
         <div class="details-summary admonition-title">
-            <i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+            <i class="icon fas fa-list-ul fa-fw"></i>Abstract<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
         <div class="details-content">
             <div class="admonition-content"><p>This post is a part of a series;</p>
 <ol>
 <li><a href="/posts/language-models/01-theory/" rel="">Introduction and theory</a></li>
 <li><a href="/posts/language-models/02-eda/" rel="">Dataset exploratory analysis</a></li>
-<li>Project structure and tokenizer (you are here)</li>
+<li>Tokenizer (you are here)</li>
 <li>Training the model</li>
 <li>Evaluation of language model</li>
 <li>Experiments with the model</li>
@@ -177,7 +189,7 @@
         </div>
     </div>
 <h2 id="creating-tokenizer-interface">Creating tokenizer interface</h2>
-<p>First, I&rsquo;m going to define the interface of tokenizer - a list of methods and their responsibilities.</p>
+<p>First, I&rsquo;m going to define the tokenizer interface - a list of methods and their responsibilities.  Create a file <code>char_lm/tokenizer.py</code>. Fill it with required imports and tokenizer class scaffold.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -213,10 +225,6 @@
 </span><span class="lnt">31
 </span><span class="lnt">32
 </span><span class="lnt">33
-</span><span class="lnt">34
-</span><span class="lnt">35
-</span><span class="lnt">36
-</span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">CharacterTokenizer</span><span class="p">:</span>
@@ -236,7 +244,7 @@
         <span class="s2">&#34;&#34;&#34;Encodes a single string&#34;&#34;&#34;</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">encode_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="o">=</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">encode_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="o">=</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">:</span>
         <span class="s2">&#34;&#34;&#34;Encodes a batch of strings and pads them to the longest one&#34;&#34;&#34;</span>
         <span class="k">pass</span>
 
@@ -244,16 +252,12 @@
         <span class="s2">&#34;&#34;&#34;Decodes string from 1-D tensor&#34;&#34;&#34;</span>
         <span class="k">pass</span>
 
-    <span class="k">def</span> <span class="nf">decode_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span><span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-        <span class="s2">&#34;&#34;&#34;Decodes list of strings from a 2-D tensor&#34;&#34;&#34;</span>
-        <span class="k">pass</span>
-
-    <span class="k">def</span> <span class="nf">to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
         <span class="s2">&#34;&#34;&#34;Saves the tokenizer to a file&#34;&#34;&#34;</span>
         <span class="k">pass</span>
     
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CharacterTokenizer</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
         <span class="s2">&#34;&#34;&#34;Instantiates a tokenizer from file&#34;&#34;&#34;</span>
         <span class="k">pass</span>
 </code></pre></td></tr></table>
@@ -263,10 +267,10 @@
             <i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
         <div class="details-content">
-            <div class="admonition-content">If you are not familiar with type hints - i encourage you to use them!</div>
+            <div class="admonition-content">If you are not familiar with type hints - I encourage you to give them a try!</div>
         </div>
     </div>
-<p>They should cover all our requirements. We will implement them more or less in given order.</p>
+<p>They should cover all our requirements. We are going to implement them more or less in the given order.</p>
 <h2 id="implementation">Implementation</h2>
 <h3 id="init">Init</h3>
 <p>In <code>__init__</code>, we will define special tokens. The model will use <code>sos</code>,<code>eos</code>,<code>oov</code>,<code>pad</code>. To make life easier, they will be represented as single characters (instead of strings like <code>[sos]</code>). Additionally, we fix the index of <code>pad</code> token - it&rsquo;s going to help us later.</p>
@@ -281,14 +285,14 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sos_token</span> <span class="o">=</span> <span class="s2">&#34;^&#34;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eos_token</span> <span class="o">=</span> <span class="s2">&#34;$&#34;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">oov_token</span> <span class="o">=</span> <span class="s2">&#34;@&#34;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pad_token</span> <span class="o">=</span> <span class="s2">&#34;#&#34;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pad_index</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">sos_token</span> <span class="o">=</span> <span class="s2">&#34;^&#34;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">eos_token</span> <span class="o">=</span> <span class="s2">&#34;$&#34;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">oov_token</span> <span class="o">=</span> <span class="s2">&#34;@&#34;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pad_token</span> <span class="o">=</span> <span class="s2">&#34;#&#34;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">pad_index</span> <span class="o">=</span> <span class="mi">0</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>Every time a special token will be referenced - it will use those fields.</p>
+</div><p>Every time a special token will be referenced - it will use those fields. I will make replacing them if necessary easy.</p>
 <h3 id="fit">Fit</h3>
 <p>The fit method takes a path to a text file and uses it to create a vocabulary and token-index mapping.</p>
 <div class="details admonition info open">
@@ -296,7 +300,7 @@
             <i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
         </div>
         <div class="details-content">
-            <div class="admonition-content">Every time I need a file path I use <code>Path</code> class from <code>pathlib</code> module. It is a high-level replacement for ordinary strings making path manipulations safer. You can read more here: <a href="https://treyhunner.com/2018/12/why-you-should-be-using-pathlib/">https://treyhunner.com/2018/12/why-you-should-be-using-pathlib/</a></div>
+            <div class="admonition-content">Every time I need a file path, I use <code>Path</code> class from <code>pathlib</code> module. It is a high-level replacement for ordinary strings making path manipulations safer. You can read more here: <a href="https://treyhunner.com/2018/12/why-you-should-be-using-pathlib/">https://treyhunner.com/2018/12/why-you-should-be-using-pathlib/</a></div>
         </div>
     </div>
 <p>We load all text from the file and remove newlines - as city names should not contain them.</p>
@@ -312,8 +316,8 @@
         <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>To get unique characters we can use <code>Counter</code> from <code>collections</code> and log 10 most common characters - to have a sanity check.</p>
-<p>Next, we construct a mapping from index of character to actual character. We need to include all special tokens and all tokens from vocabulary.</p>
+</div><p>To get unique characters, we can use <code>Counter</code> from <code>collections</code> and log the ten most common characters - to have a sanity check.</p>
+<p>Next, we construct a mapping from the index of the character to the actual character. We need to include all special tokens and all tokens from the vocabulary.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -372,7 +376,15 @@ tok2idx
  &#34;&#39;&#34;: 55, &#39;.&#39;: 56, &#39;j&#39;: 57, &#39;Z&#39;: 58, &#39;X&#39;: 59})
 </code></pre></td></tr></table>
 </div>
-</div><p>Special tokens are located on top, followed by regular tokens in desceding frequency order. With both of them we can easily map between text and numeric representation</p>
+</div><p>Special tokens are located on the top, followed by regular tokens in descending frequency order. With both of them, we can easily map between text and numeric representation.</p>
+<div class="details admonition warning open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-exclamation-triangle fa-fw"></i>Warning<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Notice that <code>pad</code> is first at the list - as I want to have index 0 for it.</div>
+        </div>
+    </div>
 <h4 id="out-of-vocabulary">Out of vocabulary</h4>
 <p>If we try to get index for out of vocabulary token there will be an error:</p>
 <div class="highlight"><div class="chroma">
@@ -435,10 +447,10 @@ tok2idx[&#39;;&#39;]
 <pre class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">logger.info(f&#34;Created vocabulary with {self.get_vocab_size()} tokens&#34;)
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Created vocabulary with {self.get_vocab_size()} tokens&#34;</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>We can make a quick test, at the end of file add (you can ignore logger config)</p>
+</div><p>We can make a quick manual test - create tokenizer and fit it on full dataset. At the end of file add:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt">1
@@ -448,7 +460,7 @@ tok2idx[&#39;;&#39;]
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span> <span class="c1"># ignore this line if you use print</span>
     <span class="n">ct</span> <span class="o">=</span> <span class="n">CharacterTokenizer</span><span class="p">()</span>
     <span class="n">ct</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="s2">&#34;data/dataset/city/full.txt&#34;</span><span class="p">))</span>
 </code></pre></td></tr></table>
@@ -464,7 +476,7 @@ INFO:__main__:Created vocabulary with 60 tokens
 </code></pre></td></tr></table>
 </div>
 </div><p>Looks good.</p>
-<h2 id="get-vocab-size">Get vocab size</h2>
+<h3 id="get-vocab-size">Get vocab size</h3>
 <p>This one is trivial:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -476,7 +488,7 @@ INFO:__main__:Created vocabulary with 60 tokens
     <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tok2idx</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
-</div><h2 id="encode">Encode</h2>
+</div><h3 id="encode">Encode</h3>
 <p>The heart of tokenizer. We can imagine that sometimes we want to include special tokens and sometimes no - we can handle both scenarios.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -493,12 +505,12 @@ INFO:__main__:Created vocabulary with 60 tokens
         <span class="n">s</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sos_token</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">eos_token</span><span class="p">]</span>
     
     <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tok2idx</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>Encoding is also easy: just replace every character with numeric representation and cast it to a tensor. We already have <code>oov</code> support!</p>
-<h2 id="encode-batch">Encode batch</h2>
-<p>As we train model in batches it is useful to have a method for direct batch encoding. Just apply <code>encode</code> on each string from list.</p>
+</div><p>If special tokens are required, prepend and append them to the input string. To encode, we just replace every character with numeric representation and cast the result to a long tensor. We already have <code>oov</code> support!</p>
+<h3 id="encode-batch">Encode batch</h3>
+<p>As we train models in batches, it is helpful to have a method for direct batch encoding. The first step is to apply <code>encode</code> on each string from the list. As strings will have different lengths, we need to pad them to the longest one. For this purpose, we use <code>pad_sequence</code> from PyTorch. By default, it returns a result with shape <code>max sequence len</code>x<code>batch size</code>, but I found it easier to have <code>batch size</code>x<code>max sequence len</code>. Hopefully, there is an argument for that. Value for padding is the index of <code>pad</code> token. Instead of hard-coding <code>0</code>, I use the field <code>self.pad_index</code> if it changes later.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code><span class="lnt"> 1
@@ -514,7 +526,7 @@ INFO:__main__:Created vocabulary with 60 tokens
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">encode_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="o">=</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">encode_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="o">=</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">:</span>
     <span class="n">encoded</span> <span class="o">=</span> <span class="p">[</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="n">include_special_tokens</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">texts</span>
@@ -527,8 +539,7 @@ INFO:__main__:Created vocabulary with 60 tokens
     <span class="k">return</span> <span class="n">padded</span>
 </code></pre></td></tr></table>
 </div>
-</div><p>As strings will have different lengths, we need to pad them to the longest one - using <code>pad</code> token. That&rsquo;s why we defined its index in <code>__init__</code>.</p>
-<h2 id="decode">Decode</h2>
+</div><h3 id="decode">Decode</h3>
 <p>This one is similar - just do it other way around. Here we do not care about <code>oov</code> at all.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -542,11 +553,897 @@ INFO:__main__:Created vocabulary with 60 tokens
     <span class="k">return</span> <span class="s2">&#34;&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decoded</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
+</div><p>It is a good place for next testing round. We can try something like this: take an example from dataset and enode it. Next, try to decode encoded value and check if it is correct.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">sample_sequence</span> <span class="o">=</span> <span class="s2">&#34;Abbeville&#34;</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&#34;Sequence:&#34;</span><span class="p">,</span> <span class="n">sample_sequence</span><span class="p">)</span>
+<span class="n">encoded</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">sample_sequence</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&#34;Encoded:&#34;</span><span class="p">,</span> <span class="n">encoded</span><span class="p">)</span>
+<span class="n">decoded</span> <span class="o">=</span> <span class="n">ct</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s2">&#34;Decoded:&#34;</span><span class="p">,</span> <span class="n">decoded</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>We will get</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">Sequence: Abbeville
+Encoded: tensor([1, 4, 5, 5, 6, 7, 8, 9, 9, 6, 2])
+Decoded: ^Abbeville$
+</code></pre></td></tr></table>
+</div>
+</div><p>Encoding added <code>sos</code> and <code>eos</code> (values 1 and 2). When we decode, special tokens are visible.</p>
+<h3 id="to-file">To file</h3>
+<p>As the tokenizer needs fitting, we need to save it to a file. I do not want to fit it every time before using the model. I use <code>dill</code> instead of <code>pickle</code> because it can serialize <code>defaultdict</code> (<code>pickle</code> cannot).</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;wb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">dill</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="from-file">From file</h3>
+<p>If there is save, there is also load.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="nd">@staticmethod</span>
+<span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+    <span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;rb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">dill</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="command-line-interface">Command line interface</h2>
+<p>We finished our tokenizer. Now let&rsquo;s create a simple interface for it. As arguments we pick corpus file and file where save fitted tokenizer.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="nd">@click.command</span><span class="p">()</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s2">&#34;-i&#34;</span><span class="p">,</span> <span class="s2">&#34;--corpus-path&#34;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s2">&#34;-o&#34;</span><span class="p">,</span> <span class="s2">&#34;--output-path&#34;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">):</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+    <span class="n">coprus_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">)</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+
+    <span class="n">output_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">CharacterTokenizer</span><span class="p">()</span>
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">coprus_path</span><span class="p">)</span>
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Saved tokenizer to: {output_path}&#34;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Example run:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">python char_lm/tokenizer.py -i data/dataset/city/train.txt -o models/tokenizer
+INFO:__main__:Most frequent tokens <span class="o">[(</span><span class="s1">&#39;e&#39;</span>, 16069<span class="o">)</span>, <span class="o">(</span><span class="s1">&#39;l&#39;</span>, 14244<span class="o">)</span>, <span class="o">(</span><span class="s1">&#39;a&#39;</span>, 13752<span class="o">)</span>, <span class="o">(</span><span class="s1">&#39;o&#39;</span>, 11395<span class="o">)</span>, <span class="o">(</span><span class="s1">&#39;i&#39;</span>, 10539<span class="o">)</span>, <span class="o">(</span><span class="s1">&#39;r&#39;</span>, 10018<span class="o">)</span>, <span class="o">(</span><span class="s1">&#39;n&#39;</span>, 9778<span class="o">)</span>, <span class="o">(</span><span class="s1">&#39; &#39;</span>, 8099<span class="o">)</span>, <span class="o">(</span><span class="s1">&#39;t&#39;</span>, 7249<span class="o">)</span>, <span class="o">(</span><span class="s1">&#39;s&#39;</span>, 5867<span class="o">)]</span>
+INFO:__main__:Created vocabulary with <span class="m">60</span> tokens
+INFO:__main__:Saved tokenizer to: models/tokenizer
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="unit-testing">Unit testing</h2>
+<p>During development we tested the tokenizer manually. But this is not enough - that&rsquo;s why we will also create basic unit tests.</p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>Tip<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">I will not make introduction to unit testing here., but even if you have never used them I encourage you to try. For a tutorial on pytest check out: <a href="https://www.guru99.com/pytest-tutorial.html">https://www.guru99.com/pytest-tutorial.html</a></div>
+        </div>
+    </div>
+<p>For first, let&rsquo;s create a file <code>tests/test_tokenizer.py</code> file. It will contain all unit tests for the tokenizer.</p>
+<h3 id="first-test-and-fixtures">First test and fixtures</h3>
+<p>Trying to start simple, we can test the method <code>get_vocab_size</code> - see if it returns the expected size. For example, if our corpus contains 10 distinct characters we expect that vocab size will be 14 (10 + <code>sos</code> + <code>eos</code> + <code>pad</code> + <code>oov</code>). Ok, but how do we know how many unique characters are in the file? We could use our tokenizer&hellip; No. That would be pointless - we cannot use the code we test to test itself.</p>
+<p>Instead, we should count characters manually (or use a different method that we consider safe). But this gives us another issue. What if the corpus is big? Should we scroll endlessly through it and taking notes about letters? Of course not. Instead, we use a data fixture - a small artificial data file.</p>
+<p>Create a file <code>tests/fixtures/tiny_corpus.txt</code> with following content:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">aaab
+aaac
+aaad
+aaae
+aaaf
+</code></pre></td></tr></table>
+</div>
+</div><p>For such small corpus it&rsquo;s easy to spot unique characters - <code>abcdef</code>. With special token it is 10 tokens.</p>
+<p>For first unit test let&rsquo;s create file <code>test/test_tokenizer.py</code> with following content:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">char_lm.tokenizer</span> <span class="kn">import</span> <span class="n">CharacterTokenizer</span>
+
+<span class="k">def</span> <span class="nf">test_vocab_size</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">:</span> <span class="n">CharacterTokenizer</span><span class="p">):</span>
+    <span class="n">corpus_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&#34;tests/fixtures/tiny_corpus.txt&#34;</span><span class="p">)</span>
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">CharacterTokenizer</span><span class="p">()</span>
+
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">)</span>
+    
+    <span class="c1"># 6 letters + 4 special tokens</span>
+    <span class="k">assert</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">get_vocab_size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">6</span> <span class="o">+</span> <span class="mi">4</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>We have a single test function. It starts with required initialization - creating a tokenizer. Next we perform <code>fit</code> operation using test corpus. Last but not least we test if method we test behaves correctly. Here it is very simple - just compare actual output with expected one.</p>
+<p>In order to run the test, just execute command pytest (remeber to install it first).</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-shell" data-lang="shell">pytest
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">============================= test session starts ==============================
+platform linux -- Python 3.8.5, pytest-5.4.3, py-1.10.0, pluggy-0.13.1
+rootdir: /home/xevaquor/artofai/char-lm
+plugins: anyio-2.1.0
+collected 1 item                                                               
+
+tests/test_tokenizer.py .                                                [100%]
+
+============================== 1 passed in 0.26s ===============================
+</code></pre></td></tr></table>
+</div>
+</div><p>From the output we see that pytest found one test case and it passed! Let&rsquo;s try to make it fail. Change <code>assert tokenizer.get_vocab_size() == 6 + 4</code> to <code>assert tokenizer.get_vocab_size() == 6 + 3</code>. and run it again. Output is following:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">============================= test session starts ==============================
+platform linux -- Python 3.8.5, pytest-5.4.3, py-1.10.0, pluggy-0.13.1
+rootdir: /home/xevaquor/artofai/char-lm
+plugins: anyio-2.1.0
+collected 1 item                                                               
+
+tests/test_tokenizer.py F                                                [100%]
+
+=================================== FAILURES ===================================
+_______________________________ test_vocab_size ________________________________
+
+tokenizer = &lt;char_lm.tokenizer.CharacterTokenizer object at 0x7f925eae0d90&gt;
+
+    def test_vocab_size(tokenizer: CharacterTokenizer):
+        corpus_path = Path(&#34;tests/fixtures/tiny_corpus.txt&#34;)
+        tokenizer = CharacterTokenizer()
+        tokenizer.fit(corpus_path)
+    
+        # 6 letters + 4 special tokens
+        assert tokenizer.get_vocab_size() == 6 + 3
+E       assert 10 == (6 + 3)
+E        +  where 10 = &lt;bound method CharacterTokenizer.get_vocab_size of &lt;char_lm.tokenizer.CharacterTokenizer object at 0x7f925eae0d90&gt;&gt;()
+E        +    where &lt;bound method CharacterTokenizer.get_vocab_size of &lt;char_lm.tokenizer.CharacterTokenizer object at 0x7f925eae0d90&gt;&gt; = &lt;char_lm.tokenizer.CharacterTokenizer object at 0x7f925eae0d90&gt;.get_vocab_size
+
+tests/test_tokenizer.py:23: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_tokenizer.py::test_vocab_size - assert 10 == (6 + 3)
+============================== 1 failed in 0.36s ===============================
+</code></pre></td></tr></table>
+</div>
+</div><p>We see what and where failed - returned value was 10 but expected was 6+3=9. Fix it once again and we can add some more tests.</p>
+<h3 id="test-encode-decode">Test encode-decode</h3>
+<p>Important property for our tokenizer is reversebility - when we encode a string, after decoding we should get the original one. Let&rsquo;s test it!</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">test_encode_decode_without_special_chars</span><span class="p">():</span>
+    <span class="n">corpus_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&#34;tests/fixtures/tiny_corpus.txt&#34;</span><span class="p">)</span>
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">CharacterTokenizer</span><span class="p">()</span>
+
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">)</span>
+
+    <span class="n">text</span> <span class="o">=</span> <span class="s2">&#34;abc&#34;</span>
+    <span class="n">encoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">decoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">decoded</span> <span class="o">==</span> <span class="n">text</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>First, the tokenizer is instanciated. Next, a test string <code>abc</code> is defined. It is encoded (without adding <code>sos</code>/<code>eos</code>) and then decoded. A check is made if result of this operation is equal to the original input.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">============================= test session starts ==============================
+platform linux -- Python 3.8.5, pytest-5.4.3, py-1.10.0, pluggy-0.13.1
+rootdir: /home/xevaquor/artofai/char-lm
+plugins: anyio-2.1.0
+collected 2 items                                                              
+
+tests/test_tokenizer.py ..                                               [100%]
+
+============================== 2 passed in 0.27s ===============================
+</code></pre></td></tr></table>
+</div>
+</div><p>It works :)</p>
+<h3 id="fixtures-once-again">Fixtures once again</h3>
+<p>Before we add another tests you might spot an issue. We create an instance of tokenizer at <em>every</em> test - evein if it is exactly the same. Code duplication is of course wrong. TO deal with it we can create another kind of fixture - creating tokenizer. Having it, inside the test we can tell pytest &ldquo;I need an instance of CharacterTokenizer, give me one.&rdquo;. = without worrying how to create it inside the test. Let&rsquo;s see the example.</p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>Tip<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">To read more about fixtures see: <a href="https://docs.pytest.org/en/stable/fixture.html">https://docs.pytest.org/en/stable/fixture.html</a></div>
+        </div>
+    </div>
+<p>Fixture creation is very simple. We need to create a function and decorate it with <code>pytest.fixture</code> decorator. Inside this function we perform all steps needed to build the tokenizer and just return it.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="nd">@pytest.fixture</span>
+<span class="k">def</span> <span class="nf">tokenizer</span><span class="p">():</span>
+    <span class="n">corpus_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&#34;tests/fixtures/tiny_corpus.txt&#34;</span><span class="p">)</span>
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">CharacterTokenizer</span><span class="p">()</span>
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tokenizer</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Having it we can modify our first test to use this fixture:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">test_vocab_size</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">:</span> <span class="n">CharacterTokenizer</span><span class="p">):</span>
+    <span class="c1"># 6 letters + 4 special tokens</span>
+    <span class="k">assert</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">get_vocab_size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">6</span> <span class="o">+</span> <span class="mi">4</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>As you can see, we got rid of creation iside the test, just added tokenizer argument. Pytest will understand that <code>test_vocab_size</code> needs a tokenizer. Next it will search in registered fixtures for a fixture named <code>tokenizer</code>. When it finds one, it will just execute our test function with value returned from the fixture.</p>
+<p>Similarly we can modyfy second test case.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-fallback" data-lang="fallback">def test_encode_decode_without_special_chars(tokenizer: CharacterTokenizer):
+    text = &#34;abc&#34;
+    encoded = tokenizer.encode(text, include_special_tokens=False)
+    decoded = tokenizer.decode(encoded)
+
+    assert decoded == text
+</code></pre></td></tr></table>
+</div>
+</div><p>Now, we can add as much test cases we would like to without writing a tokenizer creation code again and again.</p>
+<p>note</p>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>Question<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Think about tests you can add! In the source code for this post, I placed some propsitions.</div>
+        </div>
+    </div>
+<h2 id="summary">Summary</h2>
+<p>In this part, you lerned how to build a nice tokenizer for the model. What is more you have unit tests for your code which helps you be sure it is working as intended.</p>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>Question<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Try to add a method <code>batch_decode</code> - for decoding multiple sequences at once.</div>
+        </div>
+    </div>
+<h2 id="full-source-code">Full source code</h2>
+<p>Full code - <code>char_lm/tokenizer.py</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">Counter</span><span class="p">,</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+
+<span class="kn">import</span> <span class="nn">click</span>
+<span class="kn">import</span> <span class="nn">dill</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.nn.utils.rnn</span> <span class="kn">import</span> <span class="n">pad_sequence</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">class</span> <span class="nc">CharacterTokenizer</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sos_token</span> <span class="o">=</span> <span class="s2">&#34;^&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eos_token</span> <span class="o">=</span> <span class="s2">&#34;$&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">oov_token</span> <span class="o">=</span> <span class="s2">&#34;@&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pad_token</span> <span class="o">=</span> <span class="s2">&#34;#&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pad_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corpus_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;Fits tokenizer on text file. Vocabulary is created from all characters from file.
+</span><span class="s2">
+</span><span class="s2">        Args:
+</span><span class="s2">            corpus_file (Path): Text file location
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="k">with</span> <span class="n">corpus_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;rt&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">)</span>
+
+        <span class="n">vocab</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Most frequent tokens {vocab.most_common(10)}&#34;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">idx2tok</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span>
+            <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pad_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sos_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">eos_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">oov_token</span><span class="p">]</span>
+            <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">vocab</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tok2idx</span> <span class="o">=</span> <span class="p">{</span><span class="n">tok</span><span class="p">:</span> <span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">tok</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">idx2tok</span><span class="p">)}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tok2idx</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span>
+            <span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok2idx</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">oov_token</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">tok2idx</span>
+        <span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Created vocabulary with {self.get_vocab_size()} tokens&#34;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">get_vocab_size</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="s2">&#34;&#34;&#34;Returns size of the vocabulary
+</span><span class="s2">
+</span><span class="s2">        Returns:
+</span><span class="s2">            int: Vocabulary size
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tok2idx</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">encode_batch</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">texts</span><span class="o">=</span><span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">True</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">:</span>
+        <span class="s2">&#34;&#34;&#34;Encodes a batch of strings
+</span><span class="s2">
+</span><span class="s2">        Args:
+</span><span class="s2">            texts (List[str], required): List of strings to be encoded
+</span><span class="s2">            include_special_tokens (bool, optional): To include sos/eos tokens. Defaults to True.
+</span><span class="s2">
+</span><span class="s2">        Returns:
+</span><span class="s2">            torch.LongTensor: Encoded strings (2D tensor)
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="n">encoded</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="n">include_special_tokens</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">texts</span>
+        <span class="p">]</span>
+
+        <span class="n">padded</span> <span class="o">=</span> <span class="n">pad_sequence</span><span class="p">(</span>
+            <span class="n">encoded</span><span class="p">,</span> <span class="n">batch_first</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">padding_value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pad_index</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">padded</span>
+
+    <span class="k">def</span> <span class="nf">encode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">:</span>
+        <span class="s2">&#34;&#34;&#34;Encodes a single string
+</span><span class="s2">
+</span><span class="s2">        Args:
+</span><span class="s2">            s (str): String to encode
+</span><span class="s2">            include_special_tokens (bool, optional): If to add sos/eos. Defaults to True.
+</span><span class="s2">
+</span><span class="s2">        Returns:
+</span><span class="s2">            torch.LongTensor: 1-D encoded tensor
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="k">if</span> <span class="n">include_special_tokens</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sos_token</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">eos_token</span><span class="p">]</span>
+
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">tok2idx</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">decode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="s2">&#34;&#34;&#34;[summary]
+</span><span class="s2">
+</span><span class="s2">        Args:
+</span><span class="s2">            t (torch.LongTensor): 1-D encoded tensor
+</span><span class="s2">
+</span><span class="s2">        Returns:
+</span><span class="s2">            str: Decoded string
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="n">decoded</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">idx2tok</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">t</span><span class="p">]</span>
+        <span class="k">return</span> <span class="s2">&#34;&#34;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">decoded</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;Serializes tokenizer to a file
+</span><span class="s2">
+</span><span class="s2">        Args:
+</span><span class="s2">            path (Path): File to save tokenizer to
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="n">path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;wb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">dill</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Path</span><span class="p">):</span>
+        <span class="s2">&#34;&#34;&#34;Deserializes tokenizer from a file
+</span><span class="s2">
+</span><span class="s2">        Args:
+</span><span class="s2">            path (Path): Path from read the encoder
+</span><span class="s2">
+</span><span class="s2">        Returns:
+</span><span class="s2">            [type]: A CharacterEncoder
+</span><span class="s2">        &#34;&#34;&#34;</span>
+        <span class="k">with</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&#34;rb&#34;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">dill</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+
+<span class="nd">@click.command</span><span class="p">()</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s2">&#34;-i&#34;</span><span class="p">,</span> <span class="s2">&#34;--corpus-path&#34;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="nd">@click.option</span><span class="p">(</span><span class="s2">&#34;-o&#34;</span><span class="p">,</span> <span class="s2">&#34;--output-path&#34;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">,</span> <span class="n">output_path</span><span class="p">):</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+    <span class="n">coprus_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">)</span>
+    <span class="n">output_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+
+    <span class="n">output_path</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">CharacterTokenizer</span><span class="p">()</span>
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">coprus_path</span><span class="p">)</span>
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">output_path</span><span class="p">)</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">f</span><span class="s2">&#34;Saved tokenizer to: {output_path}&#34;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>tests/test_tokenizer.py</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span><span class="lnt">77
+</span><span class="lnt">78
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span> <span class="nn">pytest</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">from</span> <span class="nn">char_lm.tokenizer</span> <span class="kn">import</span> <span class="n">CharacterTokenizer</span>
+
+
+<span class="nd">@pytest.fixture</span>
+<span class="k">def</span> <span class="nf">tokenizer</span><span class="p">():</span>
+    <span class="n">corpus_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&#34;tests/fixtures/tiny_corpus.txt&#34;</span><span class="p">)</span>
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">CharacterTokenizer</span><span class="p">()</span>
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">corpus_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tokenizer</span>
+
+
+<span class="k">def</span> <span class="nf">test_vocab_size</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">:</span> <span class="n">CharacterTokenizer</span><span class="p">):</span>
+    <span class="c1"># 6 letters + 4 special tokens</span>
+    <span class="k">assert</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">get_vocab_size</span><span class="p">()</span> <span class="o">==</span> <span class="mi">6</span> <span class="o">+</span> <span class="mi">4</span>
+
+
+<span class="k">def</span> <span class="nf">test_encode_decode_without_special_chars</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">:</span> <span class="n">CharacterTokenizer</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s2">&#34;abc&#34;</span>
+    <span class="n">encoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">decoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">decoded</span> <span class="o">==</span> <span class="n">text</span>
+
+
+<span class="k">def</span> <span class="nf">test_encode_decode_with_special_chars</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">:</span> <span class="n">CharacterTokenizer</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s2">&#34;abc&#34;</span>
+    <span class="n">encoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">decoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">decoded</span> <span class="o">==</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">sos_token</span> <span class="o">+</span> <span class="n">text</span> <span class="o">+</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_token</span>
+
+
+<span class="k">def</span> <span class="nf">test_encode_with_oov</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">:</span> <span class="n">CharacterTokenizer</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s2">&#34;abcX&#34;</span>
+    <span class="n">encoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">encoded</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">tok2idx</span><span class="p">[</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">oov_token</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">test_encode_decode_with_oov</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">:</span> <span class="n">CharacterTokenizer</span><span class="p">):</span>
+    <span class="n">text</span> <span class="o">=</span> <span class="s2">&#34;abcX&#34;</span>
+    <span class="n">encoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">include_special_tokens</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+    <span class="n">decoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">encoded</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="p">(</span>
+        <span class="n">decoded</span>
+        <span class="o">==</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">sos_token</span>
+        <span class="o">+</span> <span class="s2">&#34;abc&#34;</span>
+        <span class="o">+</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">oov_token</span>
+        <span class="o">+</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_token</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">test_encode_batch_with_var_size</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">:</span> <span class="n">CharacterTokenizer</span><span class="p">):</span>
+    <span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;a&#34;</span><span class="p">,</span> <span class="s2">&#34;ab&#34;</span><span class="p">,</span> <span class="s2">&#34;abc&#34;</span><span class="p">]</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode_batch</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+    <span class="c1"># batch x seq len; 3x5</span>
+    <span class="k">assert</span> <span class="n">batch</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+    <span class="c1"># 2 pads in 0th example</span>
+    <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">equal</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">:],</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+    <span class="c1"># 0 pads in last example</span>
+    <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="p">:]</span> <span class="o">!=</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]))</span>
+
+
+<span class="k">def</span> <span class="nf">test_serialize_deserialize</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">:</span> <span class="n">CharacterTokenizer</span><span class="p">,</span> <span class="n">tmp_path</span><span class="p">):</span>
+    <span class="n">serialization_path</span> <span class="o">=</span> <span class="n">tmp_path</span> <span class="o">/</span> <span class="s2">&#34;tokenizer.pickle&#34;</span>
+    <span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;a&#34;</span><span class="p">,</span> <span class="s2">&#34;b&#34;</span><span class="p">,</span> <span class="s2">&#34;abc&#34;</span><span class="p">]</span>
+    <span class="n">encoded</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode_batch</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+
+    <span class="n">tokenizer</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">serialization_path</span><span class="p">)</span>
+
+    <span class="n">loaded_tok</span> <span class="o">=</span> <span class="n">CharacterTokenizer</span><span class="o">.</span><span class="n">from_file</span><span class="p">(</span><span class="n">serialization_path</span><span class="p">)</span>
+    <span class="n">loaded_encoded</span> <span class="o">=</span> <span class="n">loaded_tok</span><span class="o">.</span><span class="n">encode_batch</span><span class="p">(</span><span class="n">texts</span><span class="p">)</span>
+
+    <span class="k">assert</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">encoded</span> <span class="o">==</span> <span class="n">loaded_encoded</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
 </div></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2021-03-14</span>
+                <span>Updated on 2021-03-27</span>
             </div>
             <div class="post-info-license"></div>
         </div>
