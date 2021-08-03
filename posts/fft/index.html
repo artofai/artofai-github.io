@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Fast Fourier Transform with PyTorch - The Art of Artificial Intelligence</title><meta name="Description" content="About AI, NLP and computer science"><meta property="og:title" content="Fast Fourier Transform with PyTorch" />
+<meta property="og:description" content="Recently Google released a model similar to Transformer but with self-attention replaced by Fourier transform. The model is just a bit less accurate but 6x faster on GPU. It is a great chance to introduce yourself to Fourier Transform with PyTorch." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.artofai.io/posts/fft/" />
+<meta property="article:published_time" content="2021-08-03T18:57:00+02:00" />
+<meta property="article:modified_time" content="2021-08-03T18:57:00+02:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Fast Fourier Transform with PyTorch"/>
+<meta name="twitter:description" content="Recently Google released a model similar to Transformer but with self-attention replaced by Fourier transform. The model is just a bit less accurate but 6x faster on GPU. It is a great chance to introduce yourself to Fourier Transform with PyTorch."/>
+<meta name="application-name" content="The Art of Artificial Intelligence">
+<meta name="apple-mobile-web-app-title" content="The Art of Artificial Intelligence"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.artofai.io/posts/fft/" /><link rel="prev" href="https://www.artofai.io/posts/language-models/03-tokenizer/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Fast Fourier Transform with PyTorch",
+        "inLanguage": "en",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.artofai.io\/posts\/fft\/"
+        },"genre": "posts","keywords": "fft, signal processing, pytorch","wordcount":  1599 ,
+        "url": "https:\/\/www.artofai.io\/posts\/fft\/","datePublished": "2021-08-03T18:57:00+02:00","dateModified": "2021-08-03T18:57:00+02:00","publisher": {
+            "@type": "Organization",
+            "name": "mbednarski"},"author": {
+                "@type": "Person",
+                "name": "mbednarski"
+            },"description": ""
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="The Art of Artificial Intelligence">The Art of Artificial Intelligence</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/"> Posts </a><a class="menu-item" href="/tags/"> Tags </a><a class="menu-item" href="/categories/"> Categories </a><a class="menu-item" href="/about/"> About </a><a class="menu-item" href="/newsletter/"> Newsletter </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="The Art of Artificial Intelligence">The Art of Artificial Intelligence</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="Search titles or contents..." id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="Search">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="Clear">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        Cancel
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="">Posts</a><a class="menu-item" href="/tags/" title="">Tags</a><a class="menu-item" href="/categories/" title="">Categories</a><a class="menu-item" href="/about/" title="">About</a><a class="menu-item" href="/newsletter/" title="">Newsletter</a><a href="javascript:void(0);" class="menu-item theme-switch" title="Switch Theme">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content always-active" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Fast Fourier Transform with PyTorch</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/about" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>mbednarski</a></span>&nbsp;<span class="post-category">included in <a href="/categories/computer-science/"><i class="far fa-folder fa-fw"></i>Computer Science</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-03">2021-08-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;1599 words&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;8 minutes&nbsp;</div>
+        </div><div class="featured-image"><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="head.png"
+        data-srcset="/posts/fft/head.png, head.png 1.5x, /posts/fft/head.png 2x"
+        data-sizes="auto"
+        alt="/posts/fft/head.png"
+        title="/posts/fft/head.png" /></div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#introduction">Introduction</a></li>
+    <li><a href="#sine-wave">Sine wave</a></li>
+    <li><a href="#wave-properties">Wave properties</a></li>
+    <li><a href="#generating-sine-wave">Generating sine wave</a></li>
+    <li><a href="#combining-multiple-waves">Combining multiple waves</a></li>
+    <li><a href="#decomposing-wave">Decomposing wave</a></li>
+    <li><a href="#magnitude-0-hz-bin-and-phase">Magnitude, 0 Hz bin and phase</a></li>
+    <li><a href="#undesired-effects">Undesired effects</a></li>
+    <li><a href="#closing">Closing</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><p>Recently Google released a model similar to Transformer but with self-attention replaced by Fourier transform. The model is just a bit less accurate but 6x faster on GPU. It is a great chance to introduce yourself to Fourier Transform with PyTorch.</p>
+<h2 id="introduction">Introduction</h2>
+<p>Fourier Transform is a transformation made on a temporal sequence. You may hear that “it transforms the series from the time domain into the frequency domain” - which had literally no sense for me. In this article, I’ll try to explain the basics of the FT and how to use it in Pytorch.</p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Note<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">This article is intended as an easy introduction. If you need detailed math, please look for something else ;)</div>
+        </div>
+    </div>
+<p>Before we start with the transform, we need to clean up our understanding of temporal series. For our purposes, we will often call it a signal.</p>
+<p>In layman’s terms, a temporal sequence is just a sequence of values with assigned time. So, each observation has a value and a time when it happened. The time can vary a lot - it can be measured in nanoseconds or years. For this article,  we need to have one assumption - the measurement is done at a constant rate. That is, the time difference between consecutive events is always the same. Let’s take a look at some examples.</p>
+<p>The first one is a CO2 concentration at Manual Loa. Here, the time step is equal to one month.</p>
+<figure>
+    <img src="co2.png"
+         alt="Source: https://datahub.io/core/co2-ppm#data-cli"/> <figcaption>
+            <p>Source: <a href="https://datahub.io/core/co2-ppm#data-cli">https://datahub.io/core/co2-ppm#data-cli</a></p>
+        </figcaption>
+</figure>
+
+<p>The second one comes from astronomy and represents variation in the lightness of an asteroid.</p>
+<figure>
+    <img src="light.png"
+         alt="Source: https://en.wikipedia.org/wiki/Light_curve"/> <figcaption>
+            <p>Source: <a href="https://en.wikipedia.org/wiki/Light_curve">https://en.wikipedia.org/wiki/Light_curve</a></p>
+        </figcaption>
+</figure>
+
+<p>Now, we have something interesting. Text can also be considered as a temporal sequence. For the concept of time, we do not need any units. It is perfectly fine to assume that consecutive words appear in \(t=0,1,2,3,4,\ldots\)</p>
+<figure>
+    <img src="words.svg"
+         alt="Text is also a temporal sequence"/> <figcaption>
+            <p>Text is also a temporal sequence</p>
+        </figcaption>
+</figure>
+
+<h2 id="sine-wave">Sine wave</h2>
+<p>Such real-life signals are challenging to analyze. Let&rsquo;s start with a simple sine wave. In the ideal world, it is an infinite, continuous, repeating pattern.</p>
+<figure>
+    <img src="plots/sine.svg"
+         alt="Part of infinite sine wave"/> <figcaption>
+            <p>Part of infinite sine wave</p>
+        </figcaption>
+</figure>
+
+<p>In real life, we have only a part of the signal - say, 3 seconds. Also, there is no infinite number of values - we sample the real signal with some frequency. We call this sampling rate \(f_s\) and measure in Hertz [Hz]. We do this uniformly so time step will be \(t_s=\frac{1}{f_s} \) . The data becomes more like this:</p>
+<figure>
+    <img src="plots/sampling.svg"
+         alt="Higher sampling rate - higher quality but more data to deal with it."/> <figcaption>
+            <p>Higher sampling rate - higher quality but more data to deal with it.</p>
+        </figcaption>
+</figure>
+
+<h2 id="wave-properties">Wave properties</h2>
+<p>Each wave has some properties - we need to understand them before proceeding. For us, the most important are:</p>
+<ul>
+<li>Duration - how long is the signal (in original units)</li>
+<li>Sampling rate \(f_s\)</li>
+<li>Time step \(dt\) - time between two sampling events.</li>
+<li>Total samples \(N\) - how many samples we have in total (duration times sampling rate)</li>
+<li>Amplitude \(A\) - maximum absolute value</li>
+<li>Frequency \(f\)- Number of cycles per second [Hz]</li>
+<li>Phase \(\varphi\) - initial offset [rad]</li>
+</ul>
+<figure>
+    <img src="plots/wave.svg"
+         alt="Amplitude and frequency"/> <figcaption>
+            <p>Amplitude and frequency</p>
+        </figcaption>
+</figure>
+
+<figure>
+    <img src="plots/phase.svg"
+         alt="Phase shift - as wave does not have to start at zero."/> <figcaption>
+            <p>Phase shift - as wave does not have to start at zero.</p>
+        </figcaption>
+</figure>
+
+<h2 id="generating-sine-wave">Generating sine wave</h2>
+<p>We need a piece of code for generating a sine wave. The equation is following:</p>
+<p>$$ y(t) = A\sin(2\pi f t + \varphi) $$</p>
+<p>In PyTorch we can do something like this:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+
+
+<span class="k">def</span> <span class="nf">generate_sine_wave</span><span class="p">(</span>
+    <span class="n">amplitude</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">frequency</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">phase</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">sampling_rate</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">]:</span>
+    <span class="s2">&#34;&#34;&#34;Generates a sine wave
+</span><span class="s2">
+</span><span class="s2">    Args:
+</span><span class="s2">        amplitude (float): Amplitude
+</span><span class="s2">        frequency (float): Frequnecy [Hz]
+</span><span class="s2">        phase (float): Phase [rad]
+</span><span class="s2">        sampling_rate (int): Sampling rate[Hz]
+</span><span class="s2">        duration (float): Duration [s]
+</span><span class="s2">
+</span><span class="s2">    Returns:
+</span><span class="s2">        Tuple[torch.FloatTensor, torch.FloatTensor]: t, y(t)
+</span><span class="s2">    &#34;&#34;&#34;</span>
+    <span class="n">total_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sampling_rate</span> <span class="o">*</span> <span class="n">duration</span><span class="p">)</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">duration</span><span class="p">,</span> <span class="n">total_steps</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">amplitude</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">frequency</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="n">phase</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">t</span><span class="p">,</span> <span class="n">y</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">t1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">generate_sine_wave</span><span class="p">(</span><span class="n">amplitude</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1</span><span class="n">_000</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">t2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">generate_sine_wave</span><span class="p">(</span><span class="n">amplitude</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">phase</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">2</span><span class="p">,</span> <span class="n">sampling_rate</span><span class="o">=</span><span class="mi">1</span><span class="n">_000</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mf">1.2</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">t1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">t2</span><span class="p">,</span> <span class="n">y2</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><figure>
+    <img src="plots/two_sines.svg"
+         alt="Generated signals"/> <figcaption>
+            <p>Generated signals</p>
+        </figcaption>
+</figure>
+
+<h2 id="combining-multiple-waves">Combining multiple waves</h2>
+<p>The funny thining is we can combine these simple waves to create more fancy ones. Let&rsquo;s see some examples:</p>
+<figure>
+    <img src="plots/combined1_aligned.svg"
+         alt="Combined two waves"/> <figcaption>
+            <p>Combined two waves</p>
+        </figcaption>
+</figure>
+
+<figure>
+    <img src="plots/combined2_aligned.svg"
+         alt="Combined three waves"/> <figcaption>
+            <p>Combined three waves</p>
+        </figcaption>
+</figure>
+
+<h2 id="decomposing-wave">Decomposing wave</h2>
+<figure>
+    <img src="meme.jpg"
+         alt="What if I told you you can reverse this operation"/> 
+</figure>
+
+<p>Combining smaller things into a bigger mixture is easy. But what if we have a complicated wave and would like to decompose it into elementary pieces? This is what Fourier Transform is about. Here we will use an algorithm called Fast Fourier Transform, which is widely used in computer engineering.</p>
+<p>Imagine we are given the following signal.</p>
+<figure>
+    <img src="plots/func_to_break.svg"/> 
+</figure>
+
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Excersise 1<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Try to approximate compound sines before continuing and see if you were right ;) You need to find amplitude and frequency.</div>
+        </div>
+    </div>
+<p>We are going to apply FFT to get elementary parts with PyTorch. There is a dedicated module, <code>torch.fft</code>. The first function we will use is <code>rfft</code>. The docs say:</p>
+<blockquote>
+<p>Computes the one dimensional Fourier transform of real-valued input.</p>
+</blockquote>
+<p>Input is 1D sequence of real values, so we are good.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.fft</span> <span class="kn">as</span> <span class="nn">fft</span>
+<span class="n">fourier</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">rfft</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="s1">&#39;forward&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>That was easy. But what did we get?</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">print</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">fourier</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">fourier</span><span class="p">[:</span><span class="mi">5</span><span class="p">])</span>
+
+<span class="c1"># torch.Size([1499]) torch.Size([750])</span>
+<span class="c1"># tensor([ 2.1671e-08+0.0000e+00j, -2.9042e-08+2.2379e-09j,</span>
+        <span class="c1"># -2.7894e-08-1.0006e-07j,  1.0370e-07-4.0000e-01j,</span>
+        <span class="c1">#  2.2421e-08+6.8265e-08j])</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>rfft returned a complex tensor with 5001 elements. Each value is a complex number with non-zero real and imaginary parts. What do those numbers mean? For first, let’s compute the absolute value of them and make a plot.</p>
+<div class="details admonition danger open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-skull-crossbones fa-fw"></i>Danger<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">Absolute value for a complex number is not the same as for real numbers!</div>
+        </div>
+    </div>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">absolutes</span> <span class="o">=</span> <span class="n">fourier</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;$|F(s)|$&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">absolutes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">y</span><span class="o">=</span><span class="n">absolutes</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;../plots/fourier_1.svg&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><figure>
+    <img src="plots/fourier_1.svg"/> 
+</figure>
+
+<p>What we see: a lot of zeros, and two few dots at the left side. And a mysterious axes. What do those numbers mean?</p>
+<p>We already said that the fourier transform will decompose the signal into elemetary waves. In fact the dots represents parameters of the compound waves.</p>
+<p>The Y (or the <code>abs()</code> of <code>rfft</code>) represents the magnitude of a specific wave. There are two non-zero, so we can conclude that the signal is built using two waves. But what waves? This is stored on X-axis. To interpret, we need to decode those numbers, and there is a function for that ;).</p>
+<p>Yes, there is a specific function to get labels for X-axis - <code>tfftfreq</code>. It takes two parameters - length of the signal (\(N\)) and time step (\(dt\)) of the original signal. In return, we receive frequencies corresponding to subsequent values from <code>rfft</code>. They are often called <em>bins</em>.</p>
+<p>Giving a try:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">freq</span> <span class="o">=</span> <span class="n">fft</span><span class="o">.</span><span class="n">rfftfreq</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">signal</span><span class="p">),</span> <span class="mi">1</span><span class="o">/</span><span class="n">sampling_rate</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><figure>
+    <img src="plots/fourier_2.svg"
+         alt="Bottom view is zoomed in"/> <figcaption>
+            <p>Bottom view is zoomed in</p>
+        </figcaption>
+</figure>
+
+<p>Now, we clearly see: original signal is composed of two waves: 1/5 Hz and 2 Hz with magnitudes 0.4 and 0.1
+We can easily see it by printing the biggest frequencies:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">ranked</span> <span class="o">=</span> <span class="n">absolutes</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">descending</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ranked</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;f={freq[i]:.2f}</span><span class="se">\t</span><span class="s1"> val={absolutes[i]:.4f}&#39;</span><span class="p">)</span>
+
+<span class="c1"># f=0.20	 val=0.4000</span>
+<span class="c1"># f=2.00	 val=0.1000</span>
+<span class="c1"># f=1.93	 val=0.0000</span>
+<span class="c1"># f=2.07	 val=0.0000</span>
+<span class="c1"># f=0.13	 val=0.0000</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="magnitude-0-hz-bin-and-phase">Magnitude, 0 Hz bin and phase</h2>
+<p>But wait, what is magnitude? Intuitively it is the &ldquo;amount&rdquo; of signal distributed in a specific bin. So it is closely related to amplitude. In our case, we can compute amplitude by multiplying magnitude by 2 (because in fft we used norm=&ldquo;forward&rdquo; - for different normalization, we would do it differently).</p>
+<p>Now we can safely safe that the signal is composed from two waves. First with \(A=0.8, f=0.2\text{Hz}\), second with \(A=0.2, f=2\text{Hz}\).</p>
+<p>There is one more interesting point - the 0Hz bin. It represents a constant signal (DC) - just like the integration constant. In fact, it is equal to the mean of all samples - showing if it has a vertical offset.</p>
+<p>Wait, but the wave also can have a phase shift. In this example for both of them they are equal zero ( \(\varphi=0 \text{rad}\)). Extracting with phase is more difficult, so it won&rsquo;t be covered here - as it is not needed to understand the concept itself.</p>
+<h2 id="undesired-effects">Undesired effects</h2>
+<p>Working with fft in real life is not so easy. For example, if I would change the signal duration from 15 to 16 seconds, the transform will look like this:</p>
+<p><figure>
+    <img src="plots/bad_func_to_break.svg"
+         alt="Signal is almost the same - just one second longer"/> <figcaption>
+            <p>Signal is almost the same - just one second longer</p>
+        </figcaption>
+</figure>
+
+<figure>
+    <img src="plots/bad_fourier_1.svg"
+         alt="Are there more than two waves?"/> <figcaption>
+            <p>Are there more than two waves?</p>
+        </figcaption>
+</figure>
+
+<figure>
+    <img src="plots/bad_fourier_2.svg"
+         alt="Zooming in shows multiple waves"/> <figcaption>
+            <p>Zooming in shows multiple waves</p>
+        </figcaption>
+</figure>
+</p>
+<p><strong>What happened? 😱</strong></p>
+<p>We see that instead of two waves, there are many of them. Let&rsquo;s take a closer look:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">ranked</span> <span class="o">=</span> <span class="n">absolutes</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">descending</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ranked</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;f={freq[i]:.2f}</span><span class="se">\t</span><span class="s1"> val={absolutes[i]:.4f}&#39;</span><span class="p">)</span>
+<span class="c1"># f=0.19	 val=0.3705</span>
+<span class="c1"># f=0.25	 val=0.0974</span>
+<span class="c1"># f=2.00	 val=0.0962</span>
+<span class="c1"># f=0.13	 val=0.0593</span>
+<span class="c1"># f=0.31	 val=0.0453</span>
+
+<span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">freq</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;f={f:.2f}&#39;</span><span class="p">)</span>
+
+<span class="c1"># f=0.00</span>
+<span class="c1"># f=0.06</span>
+<span class="c1"># f=0.13</span>
+<span class="c1"># f=0.19</span>
+<span class="c1"># f=0.25</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Bins now are different. Previously we had a bin f=0.2Hz, which was perfectly aligned to the signal, but now we have only f=0.19Hz and f=0.25Hz. None of them matches the exact frequency, so the FFT needs to &ldquo;spread&rdquo; across different ones. It happens because bin values depend on signal duration and timestep (recall arguments for <code>rfftfreq</code>). We cannot do much with it; we just need to know that there are no perfect results in reality.</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>Info<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">This phenomenon is known as <a href="https://en.wikipedia.org/wiki/Spectral_leakage" target="_blank" rel="noopener noreffer">spectral leakage</a>.</div>
+        </div>
+    </div>
+<h2 id="closing">Closing</h2>
+<p>Ok, I think this is enough for today. Now you should be able to conceptually know what fourier transform is. If you would like to continue exploring the topic I recommend the following starting point: <a href="https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/">https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/</a></p></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2021-08-03</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="https://www.artofai.io/posts/fft/" data-title="Fast Fourier Transform with PyTorch" data-hashtags="fft,signal processing,pytorch"><i class="fab fa-twitter fa-fw"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="https://www.artofai.io/posts/fft/" data-hashtag="fft"><i class="fab fa-facebook-square fa-fw"></i></a><a href="javascript:void(0);" title="Share on Linkedin" data-sharer="linkedin" data-url="https://www.artofai.io/posts/fft/"><i class="fab fa-linkedin fa-fw"></i></a><a href="javascript:void(0);" title="Share on Reddit" data-sharer="reddit" data-url="https://www.artofai.io/posts/fft/"><i class="fab fa-reddit fa-fw"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="https://www.artofai.io/posts/fft/" data-title="Fast Fourier Transform with PyTorch"><i class="fab fa-evernote fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/fft/">fft</a>,&nbsp;<a href="/tags/signal-processing/">signal processing</a>,&nbsp;<a href="/tags/pytorch/">pytorch</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/posts/language-models/03-tokenizer/" class="prev" rel="prev" title="Language Models [03] - Tokenizer"><i class="fas fa-angle-left fa-fw"></i>Language Models [03] - Tokenizer</a></div>
+</div>
+<div id="comments"><div id="disqus_thread" class="comment"></div><noscript>
+                Please enable JavaScript to view the comments powered by <a href="https://disqus.com/?ref_noscript">Disqus</a>.
+            </noscript></div></article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.80.0">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i> LoveIt</a>
+                </div><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/about" target="_blank">mbednarski</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="Back to Top">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="View Comments">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/katex/katex.min.css"><link rel="stylesheet" href="/lib/katex/copy-tex.min.css"><link rel="stylesheet" href="/lib/cookieconsent/cookieconsent.min.css"><script type="text/javascript" src="https://artofai-dev.disqus.com/embed.js" defer></script><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/lunr/lunr.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript" src="/lib/katex/katex.min.js"></script><script type="text/javascript" src="/lib/katex/auto-render.min.js"></script><script type="text/javascript" src="/lib/katex/copy-tex.min.js"></script><script type="text/javascript" src="/lib/katex/mhchem.min.js"></script><script type="text/javascript" src="/lib/cookieconsent/cookieconsent.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"Copy to clipboard","maxShownLines":50},"comment":{},"cookieconsent":{"content":{"dismiss":"Got it!","link":"Learn more","message":"Art of AI uses cookies in order to analyze page views and provide you comments"},"enable":true,"palette":{"button":{"background":"#f0f0f0"},"popup":{"background":"#1aa3ff"}},"theme":"edgeless"},"math":{"delimiters":[{"display":true,"left":"$$","right":"$$"},{"display":true,"left":"\\[","right":"\\]"},{"display":false,"left":"$","right":"$"},{"display":false,"left":"\\(","right":"\\)"}],"strict":false},"search":{"highlightTag":"em","maxResultLength":10,"noResultsFound":"No results found","snippetLength":30}};</script><script type="text/javascript" src="/js/theme.min.js"></script><script type="text/javascript">
+            window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());
+            gtag('config', 'G-4K85YV9H2N', { 'anonymize_ip': true });
+        </script><script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-4K85YV9H2N" async></script></body>
+</html>

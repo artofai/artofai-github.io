@@ -3,7 +3,28 @@
         <title>Tags - Tag - The Art of Artificial Intelligence</title>
         <link>https://www.artofai.io/tags/</link>
         <description>Tags - Tag - The Art of Artificial Intelligence</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 27 Mar 2021 21:00:00 &#43;0100</lastBuildDate><atom:link href="https://www.artofai.io/tags/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 03 Aug 2021 18:57:00 &#43;0200</lastBuildDate><atom:link href="https://www.artofai.io/tags/" rel="self" type="application/rss+xml" /><item>
+    <title>fft</title>
+    <link>https://www.artofai.io/tags/fft/</link>
+    <pubDate>Tue, 03 Aug 2021 18:57:00 &#43;0200</pubDate>
+    <author>Author</author>
+    <guid>https://www.artofai.io/tags/fft/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>pytorch</title>
+    <link>https://www.artofai.io/tags/pytorch/</link>
+    <pubDate>Tue, 03 Aug 2021 18:57:00 &#43;0200</pubDate>
+    <author>Author</author>
+    <guid>https://www.artofai.io/tags/pytorch/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>signal processing</title>
+    <link>https://www.artofai.io/tags/signal-processing/</link>
+    <pubDate>Tue, 03 Aug 2021 18:57:00 &#43;0200</pubDate>
+    <author>Author</author>
+    <guid>https://www.artofai.io/tags/signal-processing/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
     <title>language models</title>
     <link>https://www.artofai.io/tags/language-models/</link>
     <pubDate>Sat, 27 Mar 2021 21:00:00 &#43;0100</pubDate>
@@ -16,13 +37,6 @@
     <pubDate>Sat, 27 Mar 2021 21:00:00 &#43;0100</pubDate>
     <author>Author</author>
     <guid>https://www.artofai.io/tags/nlp/</guid>
-    <description><![CDATA[]]></description>
-</item><item>
-    <title>pytorch</title>
-    <link>https://www.artofai.io/tags/pytorch/</link>
-    <pubDate>Sat, 27 Mar 2021 21:00:00 &#43;0100</pubDate>
-    <author>Author</author>
-    <guid>https://www.artofai.io/tags/pytorch/</guid>
     <description><![CDATA[]]></description>
 </item></channel>
 </rss>
