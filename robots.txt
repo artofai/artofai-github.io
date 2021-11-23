@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /lib
+
+Sitemap: https://artofai.dev/sitemap.xml

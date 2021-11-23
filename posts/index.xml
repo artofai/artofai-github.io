@@ -39,14 +39,5 @@
     <description><![CDATA[<div class="featured-image">
                 <img src="/img_lm_01.jpg" referrerpolicy="no-referrer">
             </div>Language models are the most important concept in NLP. Learn theory and implement one by yourself.]]></description>
-</item><item>
-    <title></title>
-    <link>https://www.artofai.dev/posts/collate_fn/</link>
-    <pubDate>Mon, 01 Jan 0001 00:00:00 &#43;0000</pubDate>
-    <author>Author</author>
-    <guid>https://www.artofai.dev/posts/collate_fn/</guid>
-    <description><![CDATA[Dataset
-collate_fn
-default collate_fn]]></description>
 </item></channel>
 </rss>
