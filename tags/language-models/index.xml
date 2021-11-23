@@ -1,32 +1,32 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>language models - Tag - The Art of Artificial Intelligence</title>
-        <link>https://www.artofai.dev/tags/language-models/</link>
+        <link>https://blog.artofai.dev/tags/language-models/</link>
         <description>language models - Tag - The Art of Artificial Intelligence</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 27 Mar 2021 21:00:00 &#43;0100</lastBuildDate><atom:link href="https://www.artofai.dev/tags/language-models/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 27 Mar 2021 21:00:00 &#43;0100</lastBuildDate><atom:link href="https://blog.artofai.dev/tags/language-models/" rel="self" type="application/rss+xml" /><item>
     <title>Language Models [03] - Tokenizer</title>
-    <link>https://www.artofai.dev/posts/language-models/03-tokenizer/</link>
+    <link>https://blog.artofai.dev/posts/language-models/03-tokenizer/</link>
     <pubDate>Sat, 27 Mar 2021 21:00:00 &#43;0100</pubDate>
     <author>Author</author>
-    <guid>https://www.artofai.dev/posts/language-models/03-tokenizer/</guid>
+    <guid>https://blog.artofai.dev/posts/language-models/03-tokenizer/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/img_lm_03.jpg" referrerpolicy="no-referrer">
             </div>Build the first component: a custom tokenizer]]></description>
 </item><item>
     <title>Language Models [02] - EDA</title>
-    <link>https://www.artofai.dev/posts/language-models/02-eda/</link>
+    <link>https://blog.artofai.dev/posts/language-models/02-eda/</link>
     <pubDate>Mon, 01 Mar 2021 12:56:09 &#43;0100</pubDate>
     <author>Author</author>
-    <guid>https://www.artofai.dev/posts/language-models/02-eda/</guid>
+    <guid>https://blog.artofai.dev/posts/language-models/02-eda/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/img_lm_02.jpg" referrerpolicy="no-referrer">
             </div>Perform exploratory data analysis and create a project template for lanugage model.]]></description>
 </item><item>
     <title>Language Models [01] - Intro and theory</title>
-    <link>https://www.artofai.dev/posts/language-models/01-theory/</link>
+    <link>https://blog.artofai.dev/posts/language-models/01-theory/</link>
     <pubDate>Sun, 14 Feb 2021 12:56:09 &#43;0100</pubDate>
     <author>Author</author>
-    <guid>https://www.artofai.dev/posts/language-models/01-theory/</guid>
+    <guid>https://blog.artofai.dev/posts/language-models/01-theory/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/img_lm_01.jpg" referrerpolicy="no-referrer">
             </div>Language models are the most important concept in NLP. Learn theory and implement one by yourself.]]></description>

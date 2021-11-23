@@ -1,21 +1,21 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Categories - Category - The Art of Artificial Intelligence</title>
-        <link>https://www.artofai.dev/categories/</link>
+        <link>https://blog.artofai.dev/categories/</link>
         <description>Categories - Category - The Art of Artificial Intelligence</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 03 Aug 2021 18:57:00 &#43;0200</lastBuildDate><atom:link href="https://www.artofai.dev/categories/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 03 Aug 2021 18:57:00 &#43;0200</lastBuildDate><atom:link href="https://blog.artofai.dev/categories/" rel="self" type="application/rss+xml" /><item>
     <title>Computer Science</title>
-    <link>https://www.artofai.dev/categories/computer-science/</link>
+    <link>https://blog.artofai.dev/categories/computer-science/</link>
     <pubDate>Tue, 03 Aug 2021 18:57:00 &#43;0200</pubDate>
     <author>Author</author>
-    <guid>https://www.artofai.dev/categories/computer-science/</guid>
+    <guid>https://blog.artofai.dev/categories/computer-science/</guid>
     <description><![CDATA[]]></description>
 </item><item>
     <title>Language models</title>
-    <link>https://www.artofai.dev/categories/language-models/</link>
+    <link>https://blog.artofai.dev/categories/language-models/</link>
     <pubDate>Sat, 27 Mar 2021 21:00:00 &#43;0100</pubDate>
     <author>Author</author>
-    <guid>https://www.artofai.dev/categories/language-models/</guid>
+    <guid>https://blog.artofai.dev/categories/language-models/</guid>
     <description><![CDATA[]]></description>
 </item></channel>
 </rss>

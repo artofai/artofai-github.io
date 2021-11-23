@@ -1,14 +1,14 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>signal processing - Tag - The Art of Artificial Intelligence</title>
-        <link>https://www.artofai.dev/tags/signal-processing/</link>
+        <link>https://blog.artofai.dev/tags/signal-processing/</link>
         <description>signal processing - Tag - The Art of Artificial Intelligence</description>
-        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 03 Aug 2021 18:57:00 &#43;0200</lastBuildDate><atom:link href="https://www.artofai.dev/tags/signal-processing/" rel="self" type="application/rss+xml" /><item>
+        <generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 03 Aug 2021 18:57:00 &#43;0200</lastBuildDate><atom:link href="https://blog.artofai.dev/tags/signal-processing/" rel="self" type="application/rss+xml" /><item>
     <title>Fast Fourier Transform with PyTorch</title>
-    <link>https://www.artofai.dev/posts/fft/</link>
+    <link>https://blog.artofai.dev/posts/fft/</link>
     <pubDate>Tue, 03 Aug 2021 18:57:00 &#43;0200</pubDate>
     <author>Author</author>
-    <guid>https://www.artofai.dev/posts/fft/</guid>
+    <guid>https://blog.artofai.dev/posts/fft/</guid>
     <description><![CDATA[<div class="featured-image">
                 <img src="/head.png" referrerpolicy="no-referrer">
             </div><p>Recently Google released a model similar to Transformer but with self-attention replaced by Fourier transform. The model is just a bit less accurate but 6x faster on GPU. It is a great chance to introduce yourself to Fourier Transform with PyTorch.</p>]]></description>
